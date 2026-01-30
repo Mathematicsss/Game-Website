@@ -63,6 +63,15 @@
   const podiumAvatar1 = document.getElementById('podium-avatar-1');
   const podiumAvatar2 = document.getElementById('podium-avatar-2');
   const podiumAvatar3 = document.getElementById('podium-avatar-3');
+  const podiumActions1 = document.getElementById('podium-actions-1');
+  const podiumActions2 = document.getElementById('podium-actions-2');
+  const podiumActions3 = document.getElementById('podium-actions-3');
+  const carStatsModal = document.getElementById('car-stats-modal');
+  const carStatsModalTitle = document.getElementById('car-stats-modal-title');
+  const carStatsGrid = document.getElementById('car-stats-grid');
+  const carStatsVerdict = document.getElementById('car-stats-verdict');
+  const carStatsPartsList = document.getElementById('car-stats-parts-list');
+  const btnCloseCarStats = document.getElementById('btn-close-car-stats');
 
   let lastLeaderboard = [];
 
@@ -221,6 +230,36 @@
     return (name || '?').charAt(0).toUpperCase();
   }
 
+  function openCarStatsModal(entry) {
+    if (!entry || !entry.build || !carStatsModal) return;
+    const b = entry.build;
+    if (carStatsModalTitle) carStatsModalTitle.textContent = entry.name + ' — Car build';
+    if (carStatsGrid) {
+      const breakdownClass = (b.breakdownLikelihood === 'Very high' || b.breakdownLikelihood === 'High') ? ' stat-high-risk' : (b.breakdownLikelihood === 'Low') ? ' stat-low-risk' : '';
+      const crashClass = (b.crashLikelihood === 'High') ? ' stat-high-risk' : (b.crashLikelihood === 'Low') ? ' stat-low-risk' : '';
+      carStatsGrid.innerHTML =
+        '<span class="stat-label">Reliability (max 50)</span><span class="stat-value">' + b.totalReliability + '</span>' +
+        '<span class="stat-label">Total cost</span><span class="stat-value">' + b.totalCost + (b.overBudget ? ' (over budget)' : '') + '</span>' +
+        '<span class="stat-label">Risk score</span><span class="stat-value">' + b.totalRisk + '</span>' +
+        '<span class="stat-label">Breakdown risk</span><span class="stat-value' + breakdownClass + '">' + b.breakdownLikelihood + '</span>' +
+        '<span class="stat-label">Crash risk</span><span class="stat-value' + crashClass + '">' + b.crashLikelihood + '</span>';
+    }
+    if (carStatsVerdict) carStatsVerdict.textContent = b.verdict || '';
+    if (carStatsPartsList) {
+      carStatsPartsList.innerHTML = '';
+      (b.parts || []).forEach(function (p) {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="part-name">' + escapeHtml(p.categoryName) + '</span><span class="part-choice">' + escapeHtml(p.optionLabel) + '</span>';
+        carStatsPartsList.appendChild(li);
+      });
+    }
+    carStatsModal.hidden = false;
+  }
+
+  function closeCarStatsModal() {
+    if (carStatsModal) carStatsModal.hidden = true;
+  }
+
   socket.on('leaderboard', (data) => {
     const list = data.leaderboard || [];
     lastLeaderboard = list;
@@ -239,18 +278,45 @@
     if (podiumAvatar2) podiumAvatar2.textContent = second ? getInitial(second.name) : '';
     if (podiumAvatar3) podiumAvatar3.textContent = third ? getInitial(third.name) : '';
 
+    if (podiumActions1) {
+      podiumActions1.innerHTML = first && first.build ? '<button type="button" class="btn-review-build" data-index="0">Review build</button>' : '';
+      const btn1 = podiumActions1.querySelector('.btn-review-build');
+      if (btn1) btn1.addEventListener('click', () => openCarStatsModal(list[0]));
+    }
+    if (podiumActions2) {
+      podiumActions2.innerHTML = second && second.build ? '<button type="button" class="btn-review-build" data-index="1">Review build</button>' : '';
+      const btn2 = podiumActions2.querySelector('.btn-review-build');
+      if (btn2) btn2.addEventListener('click', () => openCarStatsModal(list[1]));
+    }
+    if (podiumActions3) {
+      podiumActions3.innerHTML = third && third.build ? '<button type="button" class="btn-review-build" data-index="2">Review build</button>' : '';
+      const btn3 = podiumActions3.querySelector('.btn-review-build');
+      if (btn3) btn3.addEventListener('click', () => openCarStatsModal(list[2]));
+    }
+
     leaderboardList.innerHTML = '';
     list.slice(3).forEach((entry, i) => {
       const rank = i + 4;
+      const globalIndex = i + 3;
       const li = document.createElement('li');
-      li.innerHTML = '<span class="rank">' + rank + '</span><span class="team-name">' + escapeHtml(entry.name) + '</span><span class="points">' + entry.points + ' pts</span>';
+      li.innerHTML = '<span class="rank">' + rank + '</span><span class="team-name">' + escapeHtml(entry.name) + '</span><span class="points">' + entry.points + ' pts</span>' +
+        (entry.build ? '<button type="button" class="btn-review-build" data-index="' + globalIndex + '">Review build</button>' : '');
       leaderboardList.appendChild(li);
+      const reviewBtn = li.querySelector('.btn-review-build');
+      if (reviewBtn) reviewBtn.addEventListener('click', () => openCarStatsModal(list[globalIndex]));
     });
 
     showView('leaderboard');
   });
 
+  if (btnCloseCarStats) btnCloseCarStats.addEventListener('click', closeCarStatsModal);
+  if (carStatsModal) {
+    const backdrop = carStatsModal.querySelector('.car-stats-modal-backdrop');
+    if (backdrop) backdrop.addEventListener('click', closeCarStatsModal);
+  }
+
   btnPlayAgain.addEventListener('click', () => {
+    closeCarStatsModal();
     gameCode = null;
     isHost = false;
     inputCode.value = '';

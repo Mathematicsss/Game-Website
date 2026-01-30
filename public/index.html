@@ -118,18 +118,21 @@
             <span class="podium-name" id="podium-name-2"></span>
             <div class="podium-badge podium-badge-silver">2</div>
             <span class="podium-score" id="podium-score-2"></span>
+            <div class="podium-actions" id="podium-actions-2"></div>
           </div>
           <div class="podium-place podium-1st" id="podium-1st">
             <div class="podium-avatar" id="podium-avatar-1"></div>
             <span class="podium-name" id="podium-name-1"></span>
             <div class="podium-badge podium-badge-gold">1</div>
             <span class="podium-score" id="podium-score-1"></span>
+            <div class="podium-actions" id="podium-actions-1"></div>
           </div>
           <div class="podium-place podium-3rd" id="podium-3rd">
             <div class="podium-avatar" id="podium-avatar-3"></div>
             <span class="podium-name" id="podium-name-3"></span>
             <div class="podium-badge podium-badge-bronze">3</div>
             <span class="podium-score" id="podium-score-3"></span>
+            <div class="podium-actions" id="podium-actions-3"></div>
           </div>
         </div>
       </div>
@@ -139,6 +142,19 @@
       </div>
       <button type="button" class="btn btn-primary btn-block" id="btn-play-again">Play Again</button>
     </section>
+
+    <!-- Car build stats modal -->
+    <div id="car-stats-modal" class="car-stats-modal" hidden aria-modal="true" aria-labelledby="car-stats-modal-title">
+      <div class="car-stats-modal-backdrop"></div>
+      <div class="car-stats-modal-content">
+        <h2 id="car-stats-modal-title" class="car-stats-modal-title"></h2>
+        <div class="car-stats-grid" id="car-stats-grid"></div>
+        <p class="car-stats-verdict" id="car-stats-verdict"></p>
+        <h3 class="car-stats-parts-title">Parts you chose</h3>
+        <ul class="car-stats-parts-list" id="car-stats-parts-list"></ul>
+        <button type="button" class="btn btn-primary btn-block" id="btn-close-car-stats">Close</button>
+      </div>
+    </div>
   </main>
 
   <script src="js/config.js"></script>

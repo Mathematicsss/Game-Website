@@ -304,12 +304,63 @@ function computeFinalScore(teamId, room) {
   return points;
 }
 
+function getBreakdownLikelihood(totalReliability) {
+  if (totalReliability <= 18) return 'Very high';
+  if (totalReliability <= 28) return 'High';
+  if (totalReliability <= 38) return 'Medium';
+  return 'Low';
+}
+
+function getCrashLikelihood(totalRisk) {
+  if (totalRisk < -12) return 'High';
+  if (totalRisk <= -3) return 'Medium';
+  return 'Low';
+}
+
+function getTeamBuildSummary(teamId, room) {
+  const choices = room.teamChoices.get(teamId);
+  if (!choices || choices.length !== GAME_DATA.length) {
+    return { totalReliability: 0, totalCost: 0, totalRisk: 0, countOneStar: 0, parts: [], breakdownLikelihood: '—', crashLikelihood: '—', verdict: 'No build data.' };
+  }
+  let totalReliability = 0;
+  let totalCost = 0;
+  let totalRisk = 0;
+  let countOneStar = 0;
+  const parts = [];
+  for (let i = 0; i < GAME_DATA.length; i++) {
+    const optIdx = choices[i];
+    if (optIdx == null) continue;
+    const cat = GAME_DATA[i];
+    const opt = cat.options[optIdx];
+    if (!opt) continue;
+    totalReliability += opt.reliability;
+    totalCost += opt.cost;
+    totalRisk += opt.risk;
+    if (opt.reliability === 1) countOneStar += 1;
+    parts.push({ categoryName: cat.name, optionLabel: opt.label, reliability: opt.reliability, cost: opt.cost, risk: opt.risk });
+  }
+  const breakdownLikelihood = getBreakdownLikelihood(totalReliability);
+  const crashLikelihood = getCrashLikelihood(totalRisk);
+  const overBudget = totalCost > BUDGET_LIMIT;
+  let verdict = '';
+  if (breakdownLikelihood === 'Low' && crashLikelihood === 'Low' && !overBudget) verdict = 'Your car is solid and safe!';
+  else if (breakdownLikelihood === 'Very high' || crashLikelihood === 'High') verdict = 'High risk of breakdown or crash.';
+  else if (overBudget) verdict = 'Over budget — reliable but expensive.';
+  else verdict = 'Decent build. Could be safer or more reliable.';
+  return { totalReliability, totalCost, totalRisk, countOneStar, parts, breakdownLikelihood, crashLikelihood, overBudget, verdict };
+}
+
 function nextCategoryOrLeaderboard(io, code, room) {
   room.currentCategoryIndex += 1;
   if (room.currentCategoryIndex >= GAME_DATA.length) {
     room.state = 'finished';
     const leaderboard = Array.from(room.teams.entries())
-      .map(([id, t]) => ({ id, name: t.name, points: computeFinalScore(id, room) }))
+      .map(([id, t]) => ({
+        id,
+        name: t.name,
+        points: computeFinalScore(id, room),
+        build: getTeamBuildSummary(id, room)
+      }))
       .sort((a, b) => b.points - a.points);
     io.to(code).emit('leaderboard', { leaderboard });
     return;
