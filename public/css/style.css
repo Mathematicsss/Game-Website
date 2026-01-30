@@ -109,16 +109,37 @@ body {
   background-clip: text;
 }
 
-/* --- Rules card (home) — prominent, can't miss --- */
+/* --- Rules card (home) — compact on startup --- */
 .rules-card {
   width: 100%;
   max-width: 520px;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.25rem;
   padding: 1.5rem 1.75rem;
   background: rgba(244, 162, 97, 0.12);
   border: 1px solid rgba(244, 162, 97, 0.35);
   border-radius: var(--radius);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.rules-card--compact {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1.15rem;
+}
+
+.rules-card--compact .rules-title {
+  font-size: 0.8rem;
+  margin: 0 0 0.5rem;
+  letter-spacing: 0.06em;
+}
+
+.rules-card--compact .rules-list {
+  padding-left: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.rules-card--compact .rules-list li {
+  margin-bottom: 0.35rem;
 }
 
 .rules-title {
