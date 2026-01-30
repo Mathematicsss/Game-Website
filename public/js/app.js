@@ -124,26 +124,30 @@
 
   socket.on('category', (data) => {
     currentCategoryIndex = data.index;
-    categoryTitle.textContent = data.name;
-    categoryDesc.textContent = 'Choose one option for your car.';
-    answerFeedback.hidden = true;
-    answerFeedback.classList.remove('recorded');
+    if (categoryTitle) categoryTitle.textContent = data.name;
+    if (categoryDesc) categoryDesc.textContent = 'Choose one option for your car.';
+    if (answerFeedback) {
+      answerFeedback.hidden = true;
+      answerFeedback.classList.remove('recorded');
+    }
 
     const pct = ((data.index + 1) / totalCategories) * 100;
-    progressFill.style.width = pct + '%';
-    progressText.textContent = (data.index + 1) + ' / ' + totalCategories;
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (progressText) progressText.textContent = (data.index + 1) + ' / ' + totalCategories;
 
-    gameOptions.innerHTML = '';
-    const letters = 'ABCDEFGHIJ';
-    (data.options || []).forEach((opt, i) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'option-btn';
-      btn.dataset.index = i;
-      btn.innerHTML = '<span class="option-letter">' + (letters[i] || (i + 1)) + '</span><span>' + escapeHtml(opt.label) + '</span>';
-      btn.addEventListener('click', () => submitAnswer(btn, i));
-      gameOptions.appendChild(btn);
-    });
+    if (gameOptions) {
+      gameOptions.innerHTML = '';
+      const letters = 'ABCDEFGHIJ';
+      (data.options || []).forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        btn.dataset.index = i;
+        btn.innerHTML = '<span class="option-letter">' + (letters[i] || (i + 1)) + '</span><span>' + escapeHtml(opt.label) + '</span>';
+        btn.addEventListener('click', () => submitAnswer(btn, i));
+        gameOptions.appendChild(btn);
+      });
+    }
     showView('game');
   });
 
