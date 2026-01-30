@@ -109,11 +109,110 @@ body {
   background-clip: text;
 }
 
-.tagline {
-  font-size: 0.95rem;
-  color: var(--text-muted);
+/* --- Rules card (home) — prominent, can't miss --- */
+.rules-card {
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 1.75rem;
+  padding: 1.5rem 1.75rem;
+  background: rgba(244, 162, 97, 0.12);
+  border: 1px solid rgba(244, 162, 97, 0.35);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.rules-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.rules-list {
   margin: 0;
-  font-weight: 300;
+  padding-left: 1.25rem;
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.rules-list li {
+  margin-bottom: 0.6rem;
+}
+
+.rules-list li:last-child {
+  margin-bottom: 0;
+}
+
+.rules-list strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* --- Game rules overlay (blocks play until dismissed) --- */
+.rules-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  animation: overlayFadeIn 0.25s ease;
+}
+
+.rules-overlay[hidden] {
+  display: none !important;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.rules-overlay-content {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+.rules-overlay-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  font-weight: 700;
+  margin: 0 0 1.25rem;
+  color: var(--accent);
+  text-align: center;
+}
+
+.rules-overlay-list {
+  margin: 0 0 1.5rem;
+  padding-left: 1.25rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.rules-overlay-list li {
+  margin-bottom: 0.5rem;
+}
+
+.rules-overlay-list li:last-child {
+  margin-bottom: 0;
+}
+
+.rules-overlay-list strong {
+  color: #fff;
+  font-weight: 600;
 }
 
 /* --- Cards --- */
@@ -310,6 +409,23 @@ input[type="text"]:focus {
 }
 
 /* --- Game --- */
+.game-reminder {
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(244, 162, 97, 0.15);
+  border: 1px solid rgba(244, 162, 97, 0.3);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.game-reminder-text {
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  font-weight: 500;
+  color: var(--text);
+}
+
 .game-progress {
   margin-bottom: 1.5rem;
   width: 100%;

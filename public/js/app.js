@@ -50,6 +50,8 @@
   const progressFill = document.getElementById('progress-fill');
   const progressText = document.getElementById('progress-text');
   const answerFeedback = document.getElementById('answer-feedback');
+  const gameRulesOverlay = document.getElementById('game-rules-overlay');
+  const btnRulesGotIt = document.getElementById('btn-rules-got-it');
 
   const leaderboardList = document.getElementById('leaderboard-list');
   const podiumName1 = document.getElementById('podium-name-1');
@@ -185,8 +187,22 @@
         gameOptions.appendChild(btn);
       });
     }
+
+    if (gameRulesOverlay) {
+      if (data.index === 0) {
+        gameRulesOverlay.hidden = false;
+      } else {
+        gameRulesOverlay.hidden = true;
+      }
+    }
     showView('game');
   });
+
+  if (btnRulesGotIt) {
+    btnRulesGotIt.addEventListener('click', () => {
+      if (gameRulesOverlay) gameRulesOverlay.hidden = true;
+    });
+  }
 
   function submitAnswer(btn, optionIndex) {
     if (btn.disabled) return;

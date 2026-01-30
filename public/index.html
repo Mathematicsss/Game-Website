@@ -21,7 +21,15 @@
       <div class="logo">
         <span class="logo-icon">⚙</span>
         <h1>Build the Most Reliable Car</h1>
-        <p class="tagline">Pick parts in 10 categories. Balance reliability, cost, and risk. Budget: 200.</p>
+      </div>
+      <div class="rules-card" aria-label="How the game works">
+        <h2 class="rules-title">How it works</h2>
+        <ul class="rules-list">
+          <li><strong>Pick one part in each of 10 categories</strong> — Engine, Transmission, Chassis, and more.</li>
+          <li><strong>Balance reliability, cost, and risk.</strong> Your final score = total reliability + risk. Going over budget costs 5 points.</li>
+          <li><strong>Budget: 200.</strong> Add up the cost of your choices; stay under to avoid the penalty.</li>
+          <li><strong>Bonuses:</strong> No part at 1 star → +5. Three or more parts at 1 star → −5.</li>
+        </ul>
       </div>
       <div class="card home-card">
         <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80" alt="Car" class="card-hero">
@@ -71,6 +79,20 @@
 
     <!-- Game (category question) -->
     <section id="view-game" class="view">
+      <div id="game-rules-overlay" class="rules-overlay" hidden aria-modal="true" aria-labelledby="game-rules-overlay-title">
+        <div class="rules-overlay-content">
+          <h2 id="game-rules-overlay-title" class="rules-overlay-title">Reminder: How you score</h2>
+          <ul class="rules-overlay-list">
+            <li><strong>10 categories</strong> — pick one option per category.</li>
+            <li><strong>Score = reliability + risk.</strong> Stay under <strong>Budget: 200</strong> or lose 5 points.</li>
+            <li>No 1-star part → +5. Three or more 1-star parts → −5.</li>
+          </ul>
+          <button type="button" class="btn btn-primary btn-block" id="btn-rules-got-it">Got it — start picking</button>
+        </div>
+      </div>
+      <div class="game-reminder" aria-live="polite">
+        <span class="game-reminder-text">Budget: 200 — Stay under to avoid −5. Reliability + risk = score.</span>
+      </div>
       <div class="game-progress">
         <span class="progress-label">Category</span>
         <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
