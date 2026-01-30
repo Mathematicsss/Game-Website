@@ -384,7 +384,8 @@ input[type="text"]:focus {
   background: rgba(244, 162, 97, 0.08);
 }
 
-.option-btn:disabled {
+.option-btn:disabled,
+.option-btn-readonly {
   cursor: default;
   opacity: 0.7;
 }

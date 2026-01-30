@@ -97,6 +97,7 @@ io.on('connection', (socket) => {
     const code = generateCode();
     const room = getRoom(code);
     room.hostId = socket.id;
+    socket.gameCode = code;
     socket.join(code);
     socket.emit('game-created', { code, categories: GAME_DATA.map(c => ({ id: c.id, name: c.name, options: c.options.map(o => ({ label: o.label })) })) });
   });
@@ -146,6 +147,8 @@ io.on('connection', (socket) => {
   socket.on('answer', ({ code, optionIndex }) => {
     const room = getRoom(code);
     if (room.state !== 'playing' || socket.gameCode !== code) return;
+    // Host does not vote; only teams (players who joined) can submit answers
+    if (socket.id === room.hostId) return;
     const team = room.teams.get(socket.id);
     if (!team) return;
     const key = `${room.currentCategoryIndex}-${socket.id}`;
@@ -167,6 +170,28 @@ io.on('connection', (socket) => {
     const room = getRoom(code);
     if (room.hostId !== socket.id || room.state !== 'playing') return;
     nextCategoryOrLeaderboard(io, code, room);
+  });
+
+  socket.on('leave-lobby', () => {
+    const code = socket.gameCode;
+    if (!code) return;
+    const room = getRoom(code);
+    const wasHost = room.hostId === socket.id;
+    socket.leave(code);
+    socket.gameCode = null;
+    socket.teamName = null;
+    if (wasHost) {
+      room.hostId = null;
+      room.teams.clear();
+      rooms.delete(code);
+      io.to(code).emit('host-left');
+    } else {
+      room.teams.delete(socket.id);
+      io.to(code).emit('lobby-update', {
+        teams: Array.from(room.teams.entries()).map(([id, t]) => ({ id, name: t.name })),
+        isHost: false
+      });
+    }
   });
 
   socket.on('disconnect', () => {

@@ -35,6 +35,8 @@
   const btnJoin = document.getElementById('btn-join');
   const btnStart = document.getElementById('btn-start');
   const btnPlayAgain = document.getElementById('btn-play-again');
+  const btnBackHost = document.getElementById('btn-back-host');
+  const btnBackPlayer = document.getElementById('btn-back-player');
 
   const lobbyCode = document.getElementById('lobby-code');
   const lobbyTeams = document.getElementById('lobby-teams');
@@ -122,10 +124,30 @@
     socket.emit('start-game', gameCode);
   });
 
+  function leaveLobbyAndGoHome() {
+    if (gameCode) socket.emit('leave-lobby');
+    gameCode = null;
+    isHost = false;
+    inputCode.value = '';
+    inputTeam.value = '';
+    setHomeError('');
+    showView('home');
+  }
+
+  if (btnBackHost) btnBackHost.addEventListener('click', leaveLobbyAndGoHome);
+  if (btnBackPlayer) btnBackPlayer.addEventListener('click', leaveLobbyAndGoHome);
+
+  socket.on('host-left', () => {
+    gameCode = null;
+    isHost = false;
+    setHomeError('The host left the game.');
+    showView('home');
+  });
+
   socket.on('category', (data) => {
     currentCategoryIndex = data.index;
     if (categoryTitle) categoryTitle.textContent = data.name;
-    if (categoryDesc) categoryDesc.textContent = 'Choose one option for your car.';
+    if (categoryDesc) categoryDesc.textContent = isHost ? 'Waiting for teams to vote.' : 'Choose one option for your car.';
     if (answerFeedback) {
       answerFeedback.hidden = true;
       answerFeedback.classList.remove('recorded');
@@ -141,10 +163,14 @@
       (data.options || []).forEach((opt, i) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'option-btn';
+        btn.className = 'option-btn' + (isHost ? ' option-btn-readonly' : '');
         btn.dataset.index = i;
         btn.innerHTML = '<span class="option-letter">' + (letters[i] || (i + 1)) + '</span><span>' + escapeHtml(opt.label) + '</span>';
-        btn.addEventListener('click', () => submitAnswer(btn, i));
+        if (!isHost) {
+          btn.addEventListener('click', () => submitAnswer(btn, i));
+        } else {
+          btn.disabled = true;
+        }
         gameOptions.appendChild(btn);
       });
     }
