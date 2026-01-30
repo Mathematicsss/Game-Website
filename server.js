@@ -7,7 +7,6 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Serve config.js dynamically so SOCKET_URL is available without a build step (fixes 404/MIME on Render)
 app.get('/js/config.js', (req, res) => {
   const url = process.env.SOCKET_URL || '';
   res.type('application/javascript');
@@ -16,10 +15,8 @@ app.get('/js/config.js', (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Game state per room (game code)
 const rooms = new Map();
 
-// Generate 6-char game code
 function generateCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
@@ -27,8 +24,6 @@ function generateCode() {
   return code;
 }
 
-// Build the Most Reliable Car — 10 categories, 5 choices each (reliability, cost, risk)
-// Scoring: total reliability + risk modifier − budget overrun penalty ± 1-star bonuses
 const BUDGET_LIMIT = 200;
 const BONUS_NO_ONE_STAR = 5;
 const MALUS_THREE_PLUS_ONE_STAR = 5;
@@ -155,7 +150,7 @@ function getRoom(code) {
       state: 'lobby',
       currentCategoryIndex: 0,
       answers: new Map(),
-      teamChoices: new Map(), // teamId -> array of 10 option indices
+      teamChoices: new Map(),
       startedAt: null
     });
   }

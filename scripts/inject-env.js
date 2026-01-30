@@ -1,8 +1,3 @@
-/**
- * Netlify build: write SOCKET_URL into public/js/config.js
- * so the frontend knows where the game backend is.
- * Set SOCKET_URL in Netlify env (e.g. https://your-app.onrender.com)
- */
 const fs = require('fs');
 const path = require('path');
 const url = process.env.SOCKET_URL || '';
