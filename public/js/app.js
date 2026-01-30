@@ -168,6 +168,9 @@
 
   socket.on('category', (data) => {
     currentCategoryIndex = data.index;
+    if (document.activeElement && document.activeElement !== document.body) {
+      document.activeElement.blur();
+    }
     if (categoryTitle) categoryTitle.textContent = data.name;
     if (categoryDesc) categoryDesc.textContent = isHost ? 'Waiting for teams to vote.' : 'Choose one option. Budget and reliability matter for your final score.';
     if (answerFeedback) {
@@ -194,6 +197,11 @@
           btn.disabled = true;
         }
         gameOptions.appendChild(btn);
+      });
+      requestAnimationFrame(() => {
+        if (document.activeElement && gameOptions.contains(document.activeElement)) {
+          document.activeElement.blur();
+        }
       });
     }
 
