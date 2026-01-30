@@ -84,16 +84,50 @@
       </div>
     </section>
 
-    <!-- Leaderboard -->
+    <!-- Leaderboard (Kahoot-style podium) -->
     <section id="view-leaderboard" class="view">
       <div class="leaderboard-header">
-        <h2>Final Results</h2>
+        <h2 class="podium-title">Podium!</h2>
         <p class="subtitle">Highest-scoring teams</p>
       </div>
-      <div class="card leaderboard-card">
-        <ol id="leaderboard-list" class="leaderboard-list"></ol>
-        <button type="button" class="btn btn-primary btn-block" id="btn-play-again">Play Again</button>
+      <div class="podium-wrap">
+        <div class="podium" id="podium">
+          <div class="podium-place podium-2nd" id="podium-2nd">
+            <div class="podium-avatar" id="podium-avatar-2"></div>
+            <span class="podium-name" id="podium-name-2"></span>
+            <div class="podium-badge podium-badge-silver">2</div>
+            <span class="podium-score" id="podium-score-2"></span>
+          </div>
+          <div class="podium-place podium-1st" id="podium-1st">
+            <div class="podium-avatar" id="podium-avatar-1"></div>
+            <span class="podium-name" id="podium-name-1"></span>
+            <div class="podium-badge podium-badge-gold">1</div>
+            <span class="podium-score" id="podium-score-1"></span>
+          </div>
+          <div class="podium-place podium-3rd" id="podium-3rd">
+            <div class="podium-avatar" id="podium-avatar-3"></div>
+            <span class="podium-name" id="podium-name-3"></span>
+            <div class="podium-badge podium-badge-bronze">3</div>
+            <span class="podium-score" id="podium-score-3"></span>
+          </div>
+        </div>
       </div>
+      <div class="leaderboard-rest-wrap">
+        <ul id="leaderboard-list" class="leaderboard-list-rest"></ul>
+      </div>
+      <div class="dream-car-wrap card">
+        <h3>Dream car</h3>
+        <p class="dream-car-hint" id="dream-car-hint">Generate an image of the car based on a team's choices.</p>
+        <div class="dream-car-controls">
+          <select id="dream-car-team" class="dream-car-select"></select>
+          <button type="button" class="btn btn-secondary" id="btn-generate-car">Generate dream car</button>
+        </div>
+        <div id="dream-car-image-wrap" class="dream-car-image-wrap" hidden>
+          <img id="dream-car-image" class="dream-car-image" alt="Dream car" />
+        </div>
+        <p id="dream-car-error" class="error-msg" hidden></p>
+      </div>
+      <button type="button" class="btn btn-primary btn-block" id="btn-play-again">Play Again</button>
     </section>
   </main>
 

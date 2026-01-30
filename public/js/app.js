@@ -52,6 +52,23 @@
   const answerFeedback = document.getElementById('answer-feedback');
 
   const leaderboardList = document.getElementById('leaderboard-list');
+  const podiumName1 = document.getElementById('podium-name-1');
+  const podiumName2 = document.getElementById('podium-name-2');
+  const podiumName3 = document.getElementById('podium-name-3');
+  const podiumScore1 = document.getElementById('podium-score-1');
+  const podiumScore2 = document.getElementById('podium-score-2');
+  const podiumScore3 = document.getElementById('podium-score-3');
+  const podiumAvatar1 = document.getElementById('podium-avatar-1');
+  const podiumAvatar2 = document.getElementById('podium-avatar-2');
+  const podiumAvatar3 = document.getElementById('podium-avatar-3');
+  const dreamCarTeam = document.getElementById('dream-car-team');
+  const btnGenerateCar = document.getElementById('btn-generate-car');
+  const dreamCarImageWrap = document.getElementById('dream-car-image-wrap');
+  const dreamCarImage = document.getElementById('dream-car-image');
+  const dreamCarError = document.getElementById('dream-car-error');
+  const dreamCarHint = document.getElementById('dream-car-hint');
+
+  let lastLeaderboard = [];
 
   let gameCode = null;
   let isHost = false;
@@ -190,15 +207,90 @@
 
   socket.on('answer-recorded', () => {});
 
+  function getInitial(name) {
+    return (name || '?').charAt(0).toUpperCase();
+  }
+
   socket.on('leaderboard', (data) => {
+    const list = data.leaderboard || [];
+    lastLeaderboard = list;
+
+    const first = list[0];
+    const second = list[1];
+    const third = list[2];
+
+    if (podiumName1) podiumName1.textContent = first ? first.name : '—';
+    if (podiumName2) podiumName2.textContent = second ? second.name : '—';
+    if (podiumName3) podiumName3.textContent = third ? third.name : '—';
+    if (podiumScore1) podiumScore1.textContent = first ? first.points + ' pts' : '';
+    if (podiumScore2) podiumScore2.textContent = second ? second.points + ' pts' : '';
+    if (podiumScore3) podiumScore3.textContent = third ? third.points + ' pts' : '';
+    if (podiumAvatar1) podiumAvatar1.textContent = first ? getInitial(first.name) : '';
+    if (podiumAvatar2) podiumAvatar2.textContent = second ? getInitial(second.name) : '';
+    if (podiumAvatar3) podiumAvatar3.textContent = third ? getInitial(third.name) : '';
+
     leaderboardList.innerHTML = '';
-    (data.leaderboard || []).forEach((entry, i) => {
+    list.slice(3).forEach((entry, i) => {
+      const rank = i + 4;
       const li = document.createElement('li');
-      li.innerHTML = '<span class="rank">' + (i + 1) + '</span><span class="team-name">' + escapeHtml(entry.name) + '</span><span class="points">' + entry.points + ' pts</span>';
+      li.innerHTML = '<span class="rank">' + rank + '</span><span class="podium-avatar-inline">' + getInitial(entry.name) + '</span><span class="team-name">' + escapeHtml(entry.name) + '</span><span class="points">' + entry.points + ' pts</span>';
       leaderboardList.appendChild(li);
     });
+
+    if (dreamCarTeam) {
+      dreamCarTeam.innerHTML = '';
+      list.forEach((entry, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = entry.name;
+        dreamCarTeam.appendChild(opt);
+      });
+    }
+    if (dreamCarImageWrap) dreamCarImageWrap.hidden = true;
+    if (dreamCarError) { dreamCarError.hidden = true; dreamCarError.textContent = ''; }
     showView('leaderboard');
   });
+
+  if (btnGenerateCar && dreamCarTeam && dreamCarImage && dreamCarImageWrap && dreamCarError) {
+    btnGenerateCar.addEventListener('click', async () => {
+      const idx = parseInt(dreamCarTeam.value, 10);
+      const entry = lastLeaderboard[idx];
+      if (!entry || !entry.choices || entry.choices.length === 0) {
+        dreamCarError.textContent = 'No choices for this team.';
+        dreamCarError.hidden = false;
+        dreamCarImageWrap.hidden = true;
+        return;
+      }
+      dreamCarError.hidden = true;
+      dreamCarImageWrap.hidden = true;
+      btnGenerateCar.disabled = true;
+      btnGenerateCar.textContent = 'Generating…';
+      try {
+        const base = window.location.origin;
+        const res = await fetch(base + '/api/generate-car-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ choices: entry.choices, teamName: entry.name })
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          dreamCarError.textContent = json.error || 'Failed to generate image.';
+          dreamCarError.hidden = false;
+          return;
+        }
+        if (json.image) {
+          dreamCarImage.src = json.image;
+          dreamCarImageWrap.hidden = false;
+        }
+      } catch (e) {
+        dreamCarError.textContent = 'Network error. Try again.';
+        dreamCarError.hidden = false;
+      } finally {
+        btnGenerateCar.disabled = false;
+        btnGenerateCar.textContent = 'Generate dream car';
+      }
+    });
+  }
 
   btnPlayAgain.addEventListener('click', () => {
     gameCode = null;

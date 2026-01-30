@@ -421,17 +421,18 @@ input[type="text"]:focus {
   background: rgba(42, 157, 143, 0.2);
 }
 
-/* --- Leaderboard --- */
+/* --- Leaderboard / Podium (Kahoot-style) --- */
 .leaderboard-header {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.leaderboard-header h2 {
+.leaderboard-header .podium-title {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
   margin: 0 0 0.25rem;
+  color: #fff;
 }
 
 .leaderboard-header .subtitle {
@@ -440,55 +441,216 @@ input[type="text"]:focus {
   font-size: 0.95rem;
 }
 
-.leaderboard-card {
+.podium-wrap {
   width: 100%;
+  margin-bottom: 1.5rem;
 }
 
-.leaderboard-list {
+.podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 200px;
+}
+
+.podium-place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 120px;
+}
+
+.podium-1st { order: 2; }
+.podium-2nd { order: 1; }
+.podium-3rd { order: 3; }
+
+.podium-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+
+.podium-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.podium-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: #0c0e12;
+  margin-bottom: 0.5rem;
+}
+
+.podium-badge-gold {
+  background: linear-gradient(145deg, #ffd700, #daa520);
+  box-shadow: 0 2px 12px rgba(255, 215, 0, 0.4);
+}
+
+.podium-badge-silver {
+  background: linear-gradient(145deg, #c0c0c0, #a0a0a0);
+  box-shadow: 0 2px 12px rgba(192, 192, 192, 0.3);
+}
+
+.podium-badge-bronze {
+  background: linear-gradient(145deg, #cd7f32, #8b4513);
+  box-shadow: 0 2px 12px rgba(205, 127, 50, 0.3);
+}
+
+.podium-score {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.podium-1st .podium-avatar { border-color: rgba(255, 215, 0, 0.5); }
+.podium-1st .podium-name { color: #fff; }
+.podium-2nd .podium-avatar { border-color: rgba(192, 192, 192, 0.5); }
+.podium-3rd .podium-avatar { border-color: rgba(205, 127, 50, 0.5); }
+
+.podium-place .podium-column {
+  width: 100%;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  min-height: 60px;
+}
+
+.podium-1st .podium-column { min-height: 100px; background: rgba(255, 215, 0, 0.12); border-color: rgba(255, 215, 0, 0.3); }
+.podium-2nd .podium-column { min-height: 75px; background: rgba(192, 192, 192, 0.1); border-color: rgba(192, 192, 192, 0.25); }
+.podium-3rd .podium-column { min-height: 50px; }
+
+.leaderboard-rest-wrap {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.leaderboard-list-rest {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.5rem;
+  margin: 0;
 }
 
-.leaderboard-list li {
+.leaderboard-list-rest li {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.04);
+  padding: 0.85rem 1.25rem;
+  background: rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-sm);
   margin-bottom: 0.5rem;
   border: 1px solid var(--border);
 }
 
-.leaderboard-list li:first-child {
-  border-color: var(--accent);
-  background: rgba(244, 162, 97, 0.12);
-  font-weight: 600;
-}
-
-.leaderboard-list .rank {
+.leaderboard-list-rest .rank {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: var(--text-muted);
   min-width: 2rem;
 }
 
-.leaderboard-list li:first-child .rank {
-  color: var(--accent);
+.leaderboard-list-rest .podium-avatar-inline {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
-.leaderboard-list .team-name {
+.leaderboard-list-rest .team-name {
   flex: 1;
   margin: 0;
+  font-weight: 500;
 }
 
-.leaderboard-list .points {
+.leaderboard-list-rest .points {
   font-family: var(--font-display);
   font-weight: 600;
   color: var(--accent);
-  font-size: 1.1rem;
+  font-size: 1rem;
+}
+
+/* Dream car block */
+.dream-car-wrap {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.dream-car-wrap h3 {
+  margin: 0 0 0.5rem;
+}
+
+.dream-car-hint {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.dream-car-controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.dream-car-select {
+  flex: 1;
+  min-width: 120px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text);
+}
+
+.dream-car-image-wrap {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+}
+
+.dream-car-image {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* --- Responsive --- */
