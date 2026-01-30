@@ -67,7 +67,7 @@
   let gameCode = null;
   let isHost = false;
   let currentCategoryIndex = 0;
-  const totalCategories = 5;
+  const totalCategories = 10;
 
   function showView(viewId) {
     Object.values(views).forEach(v => { v.classList.remove('active'); });
@@ -158,7 +158,7 @@
   socket.on('category', (data) => {
     currentCategoryIndex = data.index;
     if (categoryTitle) categoryTitle.textContent = data.name;
-    if (categoryDesc) categoryDesc.textContent = isHost ? 'Waiting for teams to vote.' : 'Choose one option for your car.';
+    if (categoryDesc) categoryDesc.textContent = isHost ? 'Waiting for teams to vote.' : 'Choose one option. Budget and reliability matter for your final score.';
     if (answerFeedback) {
       answerFeedback.hidden = true;
       answerFeedback.classList.remove('recorded');

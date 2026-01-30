@@ -27,60 +27,122 @@ function generateCode() {
   return code;
 }
 
-// Game categories and options (points hidden from client until end)
+// Build the Most Reliable Car — 10 categories, 5 choices each (reliability, cost, risk)
+// Scoring: total reliability + risk modifier − budget overrun penalty ± 1-star bonuses
+const BUDGET_LIMIT = 200;
+const BONUS_NO_ONE_STAR = 5;
+const MALUS_THREE_PLUS_ONE_STAR = 5;
+const MALUS_OVER_BUDGET = 5;
+
 const GAME_DATA = [
   {
-    id: 'body',
-    name: 'Body Type',
+    id: 'engine',
+    name: 'Engine',
     options: [
-      { label: 'Family', points: 1 },
-      { label: 'Sedan', points: 5 },
-      { label: 'Coupe', points: 2 },
-      { label: 'Pick-up', points: 3 },
-      { label: 'Hatchback', points: 4 }
+      { label: 'Fragile turbo', reliability: 1, cost: 10, risk: -3 },
+      { label: 'Powerful modern', reliability: 2, cost: 15, risk: -2 },
+      { label: 'Standard atmospheric', reliability: 3, cost: 15, risk: -1 },
+      { label: 'Renowned reliable', reliability: 4, cost: 22, risk: 0 },
+      { label: 'Simple and robust', reliability: 5, cost: 28, risk: 1 }
+    ]
+  },
+  {
+    id: 'transmission',
+    name: 'Transmission',
+    options: [
+      { label: 'Low-end CVT', reliability: 1, cost: 8, risk: -3 },
+      { label: 'Old automatic', reliability: 2, cost: 12, risk: -2 },
+      { label: 'Standard manual', reliability: 3, cost: 14, risk: -1 },
+      { label: 'Modern automatic', reliability: 4, cost: 20, risk: 0 },
+      { label: 'Robust manual', reliability: 5, cost: 24, risk: 1 }
     ]
   },
   {
     id: 'chassis',
     name: 'Chassis',
     options: [
-      { label: 'Aluminum', points: 4 },
-      { label: 'Steel', points: 3 },
-      { label: 'Cast Iron', points: 2 },
-      { label: 'Plastic', points: 1 }
-    ]
-  },
-  {
-    id: 'engine',
-    name: 'Engine',
-    options: [
-      { label: '4-cylinder 2.0L Turbo', points: 2 },
-      { label: 'V6 4.5L', points: 3 },
-      { label: '5-cylinder 2.5L Turbo', points: 1 },
-      { label: '4-cylinder 1.9 TDI Diesel', points: 5 },
-      { label: 'V8 5.7L Turbo Diesel', points: 4 }
-    ]
-  },
-  {
-    id: 'interior',
-    name: 'Interior',
-    options: [
-      { label: 'Sporty', points: 2 },
-      { label: 'Luxurious', points: 2 },
-      { label: 'Comfortable', points: 2 },
-      { label: 'Minimalist', points: 2 },
-      { label: 'Futuristic', points: 2 }
+      { label: 'Lightweight fragile', reliability: 1, cost: 8, risk: -3 },
+      { label: 'Weak standard', reliability: 2, cost: 12, risk: -2 },
+      { label: 'Standard', reliability: 3, cost: 14, risk: -1 },
+      { label: 'Reinforced', reliability: 4, cost: 20, risk: 0 },
+      { label: 'Ultra robust', reliability: 5, cost: 25, risk: 1 }
     ]
   },
   {
     id: 'electrical',
     name: 'Electrical System',
     options: [
-      { label: 'ABS Brakes', points: 5 },
-      { label: 'Air Conditioning', points: 4 },
-      { label: 'Power Windows', points: 2 },
-      { label: 'Touchscreen', points: 3 },
-      { label: 'Power Seats', points: 1 }
+      { label: 'Cheap complex', reliability: 1, cost: 8, risk: -3 },
+      { label: 'Old', reliability: 2, cost: 11, risk: -2 },
+      { label: 'Standard', reliability: 3, cost: 14, risk: -1 },
+      { label: 'Modern reliable', reliability: 4, cost: 18, risk: 0 },
+      { label: 'Simple protected', reliability: 5, cost: 22, risk: 1 }
+    ]
+  },
+  {
+    id: 'suspension',
+    name: 'Suspension',
+    options: [
+      { label: 'Cheap', reliability: 1, cost: 6, risk: -3 },
+      { label: 'Mid sport', reliability: 2, cost: 10, risk: -2 },
+      { label: 'Standard', reliability: 3, cost: 13, risk: -1 },
+      { label: 'Reinforced', reliability: 4, cost: 17, risk: 0 },
+      { label: 'Durable high-end', reliability: 5, cost: 21, risk: 1 }
+    ]
+  },
+  {
+    id: 'brakes',
+    name: 'Brakes',
+    options: [
+      { label: 'Low-end', reliability: 1, cost: 6, risk: -3 },
+      { label: 'Weak standard', reliability: 2, cost: 10, risk: -2 },
+      { label: 'Standard', reliability: 3, cost: 13, risk: -1 },
+      { label: 'Performance', reliability: 4, cost: 17, risk: 0 },
+      { label: 'Very durable', reliability: 5, cost: 21, risk: 1 }
+    ]
+  },
+  {
+    id: 'cooling',
+    name: 'Cooling',
+    options: [
+      { label: 'Weak', reliability: 1, cost: 6, risk: -3 },
+      { label: 'Cheap radiator', reliability: 2, cost: 9, risk: -2 },
+      { label: 'Standard', reliability: 3, cost: 12, risk: -1 },
+      { label: 'Reinforced', reliability: 4, cost: 16, risk: 0 },
+      { label: 'Very efficient', reliability: 5, cost: 20, risk: 1 }
+    ]
+  },
+  {
+    id: 'fuel',
+    name: 'Fuel Supply',
+    options: [
+      { label: 'Fragile pump', reliability: 1, cost: 6, risk: -3 },
+      { label: 'Cheap injectors', reliability: 2, cost: 9, risk: -2 },
+      { label: 'Standard', reliability: 3, cost: 12, risk: -1 },
+      { label: 'Reliable', reliability: 4, cost: 16, risk: 0 },
+      { label: 'Simple robust', reliability: 5, cost: 19, risk: 1 }
+    ]
+  },
+  {
+    id: 'steering',
+    name: 'Steering',
+    options: [
+      { label: 'Worn', reliability: 1, cost: 6, risk: -3 },
+      { label: 'Imprecise', reliability: 2, cost: 9, risk: -2 },
+      { label: 'Standard', reliability: 3, cost: 12, risk: -1 },
+      { label: 'Reliable power steering', reliability: 4, cost: 15, risk: 0 },
+      { label: 'Robust precise', reliability: 5, cost: 18, risk: 1 }
+    ]
+  },
+  {
+    id: 'body',
+    name: 'Body / Protection',
+    options: [
+      { label: 'Rusty', reliability: 1, cost: 5, risk: -3 },
+      { label: 'Weak protection', reliability: 2, cost: 8, risk: -2 },
+      { label: 'Standard', reliability: 3, cost: 11, risk: -1 },
+      { label: 'Reinforced protection', reliability: 4, cost: 14, risk: 0 },
+      { label: 'Very resistant', reliability: 5, cost: 17, risk: 1 }
     ]
   }
 ];
@@ -93,6 +155,7 @@ function getRoom(code) {
       state: 'lobby',
       currentCategoryIndex: 0,
       answers: new Map(),
+      teamChoices: new Map(), // teamId -> array of 10 option indices
       startedAt: null
     });
   }
@@ -106,7 +169,7 @@ io.on('connection', (socket) => {
     room.hostId = socket.id;
     socket.gameCode = code;
     socket.join(code);
-    socket.emit('game-created', { code, categories: GAME_DATA.map(c => ({ id: c.id, name: c.name, options: c.options.map(o => ({ label: o.label })) })) });
+    socket.emit('game-created', { code, categories: GAME_DATA.map(c => ({ id: c.id, name: c.name, options: c.options.map(o => ({ label: o.label })) })), budgetLimit: BUDGET_LIMIT });
   });
 
   socket.on('join-game', ({ code, teamName }) => {
@@ -125,7 +188,7 @@ io.on('connection', (socket) => {
       socket.emit('join-error', 'A team with this name already exists.');
       return;
     }
-    room.teams.set(socket.id, { name, points: 0 });
+    room.teams.set(socket.id, { name });
     socket.join(code);
     socket.gameCode = code;
     socket.teamName = name;
@@ -142,6 +205,7 @@ io.on('connection', (socket) => {
     room.state = 'playing';
     room.currentCategoryIndex = 0;
     room.answers = new Map();
+    room.teamChoices = new Map();
     room.startedAt = Date.now();
     const category = GAME_DATA[0];
     io.to(code).emit('category', {
@@ -154,7 +218,6 @@ io.on('connection', (socket) => {
   socket.on('answer', ({ code, optionIndex }) => {
     const room = getRoom(code);
     if (room.state !== 'playing' || socket.gameCode !== code) return;
-    // Host does not vote; only teams (players who joined) can submit answers
     if (socket.id === room.hostId) return;
     const team = room.teams.get(socket.id);
     if (!team) return;
@@ -163,8 +226,9 @@ io.on('connection', (socket) => {
     const category = GAME_DATA[room.currentCategoryIndex];
     const option = category.options[optionIndex];
     if (!option) return;
-    room.answers.set(key, { teamId: socket.id, points: option.points });
-    team.points += option.points;
+    room.answers.set(key, { teamId: socket.id, optionIndex });
+    if (!room.teamChoices.has(socket.id)) room.teamChoices.set(socket.id, new Array(GAME_DATA.length).fill(null));
+    room.teamChoices.get(socket.id)[room.currentCategoryIndex] = optionIndex;
     socket.emit('answer-recorded');
     const totalInRoom = room.teams.size;
     const answered = new Set([...room.answers.keys()].map(k => k.split('-')[1]));
@@ -216,12 +280,36 @@ io.on('connection', (socket) => {
   });
 });
 
+function computeFinalScore(teamId, room) {
+  const choices = room.teamChoices.get(teamId);
+  if (!choices || choices.length !== GAME_DATA.length) return 0;
+  let totalReliability = 0;
+  let totalCost = 0;
+  let totalRisk = 0;
+  let countOneStar = 0;
+  for (let i = 0; i < GAME_DATA.length; i++) {
+    const optIdx = choices[i];
+    if (optIdx == null) return 0;
+    const opt = GAME_DATA[i].options[optIdx];
+    if (!opt) return 0;
+    totalReliability += opt.reliability;
+    totalCost += opt.cost;
+    totalRisk += opt.risk;
+    if (opt.reliability === 1) countOneStar += 1;
+  }
+  let points = totalReliability + totalRisk;
+  if (totalCost > BUDGET_LIMIT) points -= MALUS_OVER_BUDGET;
+  if (countOneStar === 0) points += BONUS_NO_ONE_STAR;
+  if (countOneStar >= 3) points -= MALUS_THREE_PLUS_ONE_STAR;
+  return points;
+}
+
 function nextCategoryOrLeaderboard(io, code, room) {
   room.currentCategoryIndex += 1;
   if (room.currentCategoryIndex >= GAME_DATA.length) {
     room.state = 'finished';
     const leaderboard = Array.from(room.teams.entries())
-      .map(([id, t]) => ({ id, name: t.name, points: t.points }))
+      .map(([id, t]) => ({ id, name: t.name, points: computeFinalScore(id, room) }))
       .sort((a, b) => b.points - a.points);
     io.to(code).emit('leaderboard', { leaderboard });
     return;
@@ -236,4 +324,4 @@ function nextCategoryOrLeaderboard(io, code, room) {
 }
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Car Parts Quiz running at http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`Build the Most Reliable Car — http://localhost:${PORT}`));
