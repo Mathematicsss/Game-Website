@@ -61,12 +61,6 @@
   const podiumAvatar1 = document.getElementById('podium-avatar-1');
   const podiumAvatar2 = document.getElementById('podium-avatar-2');
   const podiumAvatar3 = document.getElementById('podium-avatar-3');
-  const dreamCarTeam = document.getElementById('dream-car-team');
-  const btnGenerateCar = document.getElementById('btn-generate-car');
-  const dreamCarImageWrap = document.getElementById('dream-car-image-wrap');
-  const dreamCarImage = document.getElementById('dream-car-image');
-  const dreamCarError = document.getElementById('dream-car-error');
-  const dreamCarHint = document.getElementById('dream-car-hint');
 
   let lastLeaderboard = [];
 
@@ -237,60 +231,8 @@
       leaderboardList.appendChild(li);
     });
 
-    if (dreamCarTeam) {
-      dreamCarTeam.innerHTML = '';
-      list.forEach((entry, i) => {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = entry.name;
-        dreamCarTeam.appendChild(opt);
-      });
-    }
-    if (dreamCarImageWrap) dreamCarImageWrap.hidden = true;
-    if (dreamCarError) { dreamCarError.hidden = true; dreamCarError.textContent = ''; }
     showView('leaderboard');
   });
-
-  if (btnGenerateCar && dreamCarTeam && dreamCarImage && dreamCarImageWrap && dreamCarError) {
-    btnGenerateCar.addEventListener('click', async () => {
-      const idx = parseInt(dreamCarTeam.value, 10);
-      const entry = lastLeaderboard[idx];
-      if (!entry || !entry.choices || entry.choices.length === 0) {
-        dreamCarError.textContent = 'No choices for this team.';
-        dreamCarError.hidden = false;
-        dreamCarImageWrap.hidden = true;
-        return;
-      }
-      dreamCarError.hidden = true;
-      dreamCarImageWrap.hidden = true;
-      btnGenerateCar.disabled = true;
-      btnGenerateCar.textContent = 'Generating…';
-      try {
-        const base = window.location.origin;
-        const res = await fetch(base + '/api/generate-car-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ choices: entry.choices, teamName: entry.name })
-        });
-        const json = await res.json();
-        if (!res.ok) {
-          dreamCarError.textContent = json.error || 'Failed to generate image.';
-          dreamCarError.hidden = false;
-          return;
-        }
-        if (json.image) {
-          dreamCarImage.src = json.image;
-          dreamCarImageWrap.hidden = false;
-        }
-      } catch (e) {
-        dreamCarError.textContent = 'Network error. Try again.';
-        dreamCarError.hidden = false;
-      } finally {
-        btnGenerateCar.disabled = false;
-        btnGenerateCar.textContent = 'Generate dream car';
-      }
-    });
-  }
 
   btnPlayAgain.addEventListener('click', () => {
     gameCode = null;

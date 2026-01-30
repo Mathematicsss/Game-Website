@@ -1,15 +1,12 @@
-require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-const { GoogleGenAI } = require('@google/genai');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Game state per room (game code)
@@ -159,7 +156,7 @@ io.on('connection', (socket) => {
     const category = GAME_DATA[room.currentCategoryIndex];
     const option = category.options[optionIndex];
     if (!option) return;
-    room.answers.set(key, { teamId: socket.id, points: option.points, label: option.label });
+    room.answers.set(key, { teamId: socket.id, points: option.points });
     team.points += option.points;
     socket.emit('answer-recorded');
     const totalInRoom = room.teams.size;
@@ -212,32 +209,12 @@ io.on('connection', (socket) => {
   });
 });
 
-function getTeamChoices(room) {
-  const byTeam = new Map();
-  for (let catIndex = 0; catIndex < GAME_DATA.length; catIndex++) {
-    for (const [key, val] of room.answers) {
-      if (key.startsWith(catIndex + '-') && val.label) {
-        const teamId = val.teamId;
-        if (!byTeam.has(teamId)) byTeam.set(teamId, []);
-        byTeam.get(teamId)[catIndex] = val.label;
-      }
-    }
-  }
-  return byTeam;
-}
-
 function nextCategoryOrLeaderboard(io, code, room) {
   room.currentCategoryIndex += 1;
   if (room.currentCategoryIndex >= GAME_DATA.length) {
     room.state = 'finished';
-    const teamChoices = getTeamChoices(room);
     const leaderboard = Array.from(room.teams.entries())
-      .map(([id, t]) => ({
-        id,
-        name: t.name,
-        points: t.points,
-        choices: teamChoices.get(id) || []
-      }))
+      .map(([id, t]) => ({ id, name: t.name, points: t.points }))
       .sort((a, b) => b.points - a.points);
     io.to(code).emit('leaderboard', { leaderboard });
     return;
@@ -250,52 +227,6 @@ function nextCategoryOrLeaderboard(io, code, room) {
     options: category.options.map(o => ({ label: o.label }))
   });
 }
-
-// Dream car image generation via Gemini (API key in env; never expose to client)
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const categoryLabels = ['Body type', 'Chassis', 'Engine', 'Interior', 'Electrical'];
-
-app.post('/api/generate-car-image', async (req, res) => {
-  if (!GEMINI_API_KEY) {
-    return res.status(503).json({ error: 'Image generation not configured. Set GEMINI_API_KEY.' });
-  }
-  const { choices = [], teamName = 'Team' } = req.body;
-  if (!Array.isArray(choices) || choices.length === 0) {
-    return res.status(400).json({ error: 'Missing or invalid choices array.' });
-  }
-  const parts = [];
-  categoryLabels.forEach((label, i) => {
-    if (choices[i]) parts.push(`${label}: ${choices[i]}`);
-  });
-  const spec = parts.join(', ');
-  const prompt = `Generate a single photorealistic image of a car that matches these build choices: ${spec}. The car should look like a cohesive "dream car" that fits all these features. Style: clean product or showroom shot, professional lighting, 16:9 wide. No text or logos in the image.`;
-  try {
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
-      contents: prompt,
-      config: {
-        responseModalities: ['TEXT', 'IMAGE']
-      }
-    });
-    const base64Image = response.data || (() => {
-      const c = response.candidates && response.candidates[0];
-      if (!c || !c.content || !c.content.parts) return null;
-      for (const part of c.content.parts) {
-        if (part.inlineData && part.inlineData.data) return part.inlineData.data;
-      }
-      return null;
-    })();
-    if (!base64Image) {
-      return res.status(502).json({ error: 'No image data in response. The model may not support image generation in this region.' });
-    }
-    res.json({ image: 'data:image/png;base64,' + base64Image });
-  } catch (err) {
-    console.error('Gemini image error:', err.message);
-    const msg = err.message || 'Image generation failed.';
-    res.status(500).json({ error: msg });
-  }
-});
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Car Parts Quiz running at http://localhost:${PORT}`));
