@@ -1,0 +1,7 @@
+# Netlify only hosts the FRONTEND (static files).
+# The game needs a Node.js + Socket.io backend running elsewhere (e.g. Render).
+# See README "Deploying to Netlify" for full instructions.
+
+[build]
+  publish = "public"
+  command = "node scripts/inject-env.js"

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Parts Quiz — Build Your Dream Car</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-wrap">
+    <div class="bg-image" aria-hidden="true"></div>
+    <div class="bg-overlay"></div>
+  </div>
+
+  <main class="app">
+    <!-- Home / Choice -->
+    <section id="view-home" class="view active">
+      <div class="logo">
+        <span class="logo-icon">⚙</span>
+        <h1>Car Parts Quiz</h1>
+        <p class="tagline">Build your dream car. Compete for the highest score.</p>
+      </div>
+      <div class="card home-card">
+        <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80" alt="Car" class="card-hero">
+        <div class="card-body">
+          <button type="button" class="btn btn-primary btn-block" id="btn-host">Create Game</button>
+          <div class="divider"><span>or join with code</span></div>
+          <div class="join-row">
+            <input type="text" id="input-code" placeholder="Game code" maxlength="6" autocomplete="off">
+            <input type="text" id="input-team" placeholder="Team name" maxlength="24">
+            <button type="button" class="btn btn-secondary" id="btn-join">Join</button>
+          </div>
+          <p id="home-error" class="error-msg" hidden></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lobby (host) -->
+    <section id="view-lobby-host" class="view">
+      <div class="lobby-header">
+        <h2>Your game code</h2>
+        <p class="game-code" id="lobby-code">------</p>
+        <p class="hint">Share this code so teams can join.</p>
+      </div>
+      <div class="card">
+        <h3>Teams in lobby</h3>
+        <ul id="lobby-teams" class="team-list"></ul>
+        <button type="button" class="btn btn-primary btn-block" id="btn-start" disabled>Start Game</button>
+        <p class="hint">At least one team must join to start.</p>
+      </div>
+    </section>
+
+    <!-- Lobby (player) -->
+    <section id="view-lobby-player" class="view">
+      <div class="lobby-header">
+        <h2>You're in</h2>
+        <p class="game-code" id="player-code">------</p>
+        <p class="team-name" id="player-team-name"></p>
+        <p class="hint">Wait for the host to start the game.</p>
+      </div>
+      <div class="card">
+        <h3>Teams in lobby</h3>
+        <ul id="lobby-teams-player" class="team-list"></ul>
+      </div>
+    </section>
+
+    <!-- Game (category question) -->
+    <section id="view-game" class="view">
+      <div class="game-progress">
+        <span class="progress-label">Category</span>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <span class="progress-text" id="progress-text">1 / 5</span>
+      </div>
+      <div class="card game-card">
+        <h2 class="category-title" id="category-title">Body Type</h2>
+        <p class="category-desc">Choose one option for your car.</p>
+        <div class="options" id="game-options"></div>
+        <p id="answer-feedback" class="answer-feedback" hidden></p>
+      </div>
+    </section>
+
+    <!-- Leaderboard -->
+    <section id="view-leaderboard" class="view">
+      <div class="leaderboard-header">
+        <h2>Final Results</h2>
+        <p class="subtitle">Highest-scoring teams</p>
+      </div>
+      <div class="card leaderboard-card">
+        <ol id="leaderboard-list" class="leaderboard-list"></ol>
+        <button type="button" class="btn btn-primary btn-block" id="btn-play-again">Play Again</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
