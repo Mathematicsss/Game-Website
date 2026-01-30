@@ -7,6 +7,13 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Serve config.js dynamically so SOCKET_URL is available without a build step (fixes 404/MIME on Render)
+app.get('/js/config.js', (req, res) => {
+  const url = process.env.SOCKET_URL || '';
+  res.type('application/javascript');
+  res.send('// Injected at runtime\nwindow.SOCKET_URL = ' + JSON.stringify(url) + ';\n');
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Game state per room (game code)
