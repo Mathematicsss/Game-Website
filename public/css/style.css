@@ -547,62 +547,66 @@ input[type="text"]:focus {
 .podium-2nd .podium-column { min-height: 75px; background: rgba(192, 192, 192, 0.1); border-color: rgba(192, 192, 192, 0.25); }
 .podium-3rd .podium-column { min-height: 50px; }
 
-.leaderboard-rest-wrap {
+.leaderboard-card {
   width: 100%;
   margin-bottom: 1.5rem;
 }
 
-.leaderboard-list-rest {
+.leaderboard-card h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.leaderboard-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.leaderboard-list-rest li {
+.leaderboard-list li {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.85rem 1.25rem;
-  background: rgba(255, 255, 255, 0.06);
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
   border-radius: var(--radius-sm);
   margin-bottom: 0.5rem;
   border: 1px solid var(--border);
 }
 
-.leaderboard-list-rest .rank {
+.leaderboard-list li:first-child {
+  border-color: var(--accent);
+  background: rgba(244, 162, 97, 0.12);
+  font-weight: 600;
+}
+
+.leaderboard-list .rank {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   color: var(--text-muted);
   min-width: 2rem;
 }
 
-.leaderboard-list-rest .podium-avatar-inline {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--border);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.9rem;
-  flex-shrink: 0;
+.leaderboard-list li:first-child .rank {
+  color: var(--accent);
 }
 
-.leaderboard-list-rest .team-name {
+.leaderboard-list .team-name {
   flex: 1;
   margin: 0;
-  font-weight: 500;
 }
 
-.leaderboard-list-rest .points {
+.leaderboard-list .points {
   font-family: var(--font-display);
   font-weight: 600;
   color: var(--accent);
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 /* --- Responsive --- */

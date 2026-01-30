@@ -227,7 +227,7 @@
     list.slice(3).forEach((entry, i) => {
       const rank = i + 4;
       const li = document.createElement('li');
-      li.innerHTML = '<span class="rank">' + rank + '</span><span class="podium-avatar-inline">' + getInitial(entry.name) + '</span><span class="team-name">' + escapeHtml(entry.name) + '</span><span class="points">' + entry.points + ' pts</span>';
+      li.innerHTML = '<span class="rank">' + rank + '</span><span class="team-name">' + escapeHtml(entry.name) + '</span><span class="points">' + entry.points + ' pts</span>';
       leaderboardList.appendChild(li);
     });
 
