@@ -247,8 +247,8 @@
       const breakdownClass = (b.breakdownLikelihood === 'Very high' || b.breakdownLikelihood === 'High') ? ' stat-high-risk' : (b.breakdownLikelihood === 'Low') ? ' stat-low-risk' : '';
       const crashClass = (b.crashLikelihood === 'High') ? ' stat-high-risk' : (b.crashLikelihood === 'Low') ? ' stat-low-risk' : '';
       carStatsGrid.innerHTML =
-        '<span class="stat-label">Reliability (max 50)</span><span class="stat-value">' + b.totalReliability + '</span>' +
-        '<span class="stat-label">Total cost</span><span class="stat-value">' + b.totalCost + (b.overBudget ? ' (over budget)' : '') + '</span>' +
+        '<span class="stat-label">Reliability</span><span class="stat-value">' + b.totalReliability + ' / 50</span>' +
+        '<span class="stat-label">Total cost</span><span class="stat-value">$' + b.totalCost + (b.overBudget ? ' (over budget)' : '') + '</span>' +
         '<span class="stat-label">Risk score</span><span class="stat-value">' + b.totalRisk + '</span>' +
         '<span class="stat-label">Breakdown risk</span><span class="stat-value' + breakdownClass + '">' + b.breakdownLikelihood + '</span>' +
         '<span class="stat-label">Crash risk</span><span class="stat-value' + crashClass + '">' + b.crashLikelihood + '</span>';
