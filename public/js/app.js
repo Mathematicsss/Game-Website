@@ -6,10 +6,7 @@
     homeError.hidden = !msg;
   }
 
-  const CONNECTION_ERROR_MSG = "Cannot connect to the game server. " +
-    "This site only hosts the frontend — the game needs a Node.js backend. " +
-    "Deploy the backend (e.g. on Render.com), then in Netlify set environment variable SOCKET_URL to your backend URL (e.g. https://your-app.onrender.com). " +
-    "See the README for step-by-step instructions.";
+  const CONNECTION_ERROR_MSG = "Failed to host backend on Render.";
 
   socket.on("connect_error", function () {
     setHomeError(CONNECTION_ERROR_MSG);

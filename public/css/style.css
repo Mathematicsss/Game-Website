@@ -341,7 +341,8 @@ body {
 }
 
 .join-row input:first-of-type {
-  flex: 0 0 6ch;
+  flex: 0 0 10ch;
+  min-width: 10ch;
 }
 
 input[type="text"] {
