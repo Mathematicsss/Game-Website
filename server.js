@@ -34,110 +34,110 @@ const GAME_DATA = [
     id: 'engine',
     name: 'Engine',
     options: [
-      { label: 'Fragile turbo', reliability: 1, cost: 10, risk: -3 },
-      { label: 'Powerful modern', reliability: 2, cost: 15, risk: -2 },
-      { label: 'Standard atmospheric', reliability: 3, cost: 15, risk: -1 },
-      { label: 'Renowned reliable', reliability: 4, cost: 22, risk: 0 },
-      { label: 'Simple and robust', reliability: 5, cost: 28, risk: 1 }
+      { label: 'Rubber band & prayer', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Lawn mower engine', reliability: 2, cost: 5, risk: -2 },
+      { label: 'Salvaged weed-whacker', reliability: 3, cost: 10, risk: -1 },
+      { label: 'Used car engine', reliability: 4, cost: 18, risk: 0 },
+      { label: 'Refurbished engine', reliability: 5, cost: 25, risk: 1 }
     ]
   },
   {
     id: 'transmission',
     name: 'Transmission',
     options: [
-      { label: 'Low-end CVT', reliability: 1, cost: 8, risk: -3 },
-      { label: 'Old automatic', reliability: 2, cost: 12, risk: -2 },
-      { label: 'Standard manual', reliability: 3, cost: 14, risk: -1 },
-      { label: 'Modern automatic', reliability: 4, cost: 20, risk: 0 },
-      { label: 'Robust manual', reliability: 5, cost: 24, risk: 1 }
+      { label: 'Shopping cart axle', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Bicycle chain', reliability: 2, cost: 4, risk: -2 },
+      { label: 'Go-kart gearbox', reliability: 3, cost: 10, risk: -1 },
+      { label: 'Used manual', reliability: 4, cost: 16, risk: 0 },
+      { label: 'Rebuilt transmission', reliability: 5, cost: 22, risk: 1 }
     ]
   },
   {
     id: 'chassis',
     name: 'Chassis',
     options: [
-      { label: 'Lightweight fragile', reliability: 1, cost: 8, risk: -3 },
-      { label: 'Weak standard', reliability: 2, cost: 12, risk: -2 },
-      { label: 'Standard', reliability: 3, cost: 14, risk: -1 },
-      { label: 'Reinforced', reliability: 4, cost: 20, risk: 0 },
-      { label: 'Ultra robust', reliability: 5, cost: 25, risk: 1 }
+      { label: 'Styrofoam frame', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Cardboard reinforced', reliability: 2, cost: 4, risk: -2 },
+      { label: 'Plywood chassis', reliability: 3, cost: 10, risk: -1 },
+      { label: 'Salvaged frame', reliability: 4, cost: 16, risk: 0 },
+      { label: 'Reinforced frame', reliability: 5, cost: 22, risk: 1 }
     ]
   },
   {
     id: 'electrical',
     name: 'Electrical System',
     options: [
-      { label: 'Cheap complex', reliability: 1, cost: 8, risk: -3 },
-      { label: 'Old', reliability: 2, cost: 11, risk: -2 },
-      { label: 'Standard', reliability: 3, cost: 14, risk: -1 },
-      { label: 'Modern reliable', reliability: 4, cost: 18, risk: 0 },
-      { label: 'Simple protected', reliability: 5, cost: 22, risk: 1 }
+      { label: 'Candle lights', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Flashlight taped on', reliability: 2, cost: 4, risk: -2 },
+      { label: 'Dollar store wiring', reliability: 3, cost: 10, risk: -1 },
+      { label: 'Used harness', reliability: 4, cost: 15, risk: 0 },
+      { label: 'New wiring', reliability: 5, cost: 20, risk: 1 }
     ]
   },
   {
     id: 'suspension',
     name: 'Suspension',
     options: [
-      { label: 'Cheap', reliability: 1, cost: 6, risk: -3 },
-      { label: 'Mid sport', reliability: 2, cost: 10, risk: -2 },
-      { label: 'Standard', reliability: 3, cost: 13, risk: -1 },
-      { label: 'Reinforced', reliability: 4, cost: 17, risk: 0 },
-      { label: 'Durable high-end', reliability: 5, cost: 21, risk: 1 }
+      { label: 'No springs (just hope)', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Pencil springs', reliability: 2, cost: 3, risk: -2 },
+      { label: 'Office chair springs', reliability: 3, cost: 8, risk: -1 },
+      { label: 'Salvaged struts', reliability: 4, cost: 14, risk: 0 },
+      { label: 'New shocks', reliability: 5, cost: 19, risk: 1 }
     ]
   },
   {
     id: 'brakes',
     name: 'Brakes',
     options: [
-      { label: 'Low-end', reliability: 1, cost: 6, risk: -3 },
-      { label: 'Weak standard', reliability: 2, cost: 10, risk: -2 },
-      { label: 'Standard', reliability: 3, cost: 13, risk: -1 },
-      { label: 'Performance', reliability: 4, cost: 17, risk: 0 },
-      { label: 'Very durable', reliability: 5, cost: 21, risk: 1 }
+      { label: 'Flip-flop on tire', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Shoe brake', reliability: 2, cost: 3, risk: -2 },
+      { label: 'Bicycle brake', reliability: 3, cost: 8, risk: -1 },
+      { label: 'Used brake pads', reliability: 4, cost: 14, risk: 0 },
+      { label: 'New brakes', reliability: 5, cost: 19, risk: 1 }
     ]
   },
   {
     id: 'cooling',
     name: 'Cooling',
     options: [
-      { label: 'Weak', reliability: 1, cost: 6, risk: -3 },
-      { label: 'Cheap radiator', reliability: 2, cost: 9, risk: -2 },
-      { label: 'Standard', reliability: 3, cost: 12, risk: -1 },
-      { label: 'Reinforced', reliability: 4, cost: 16, risk: 0 },
-      { label: 'Very efficient', reliability: 5, cost: 20, risk: 1 }
+      { label: 'Ice pack', reliability: 1, cost: 0, risk: -3 },
+      { label: 'House fan', reliability: 2, cost: 3, risk: -2 },
+      { label: 'PC fan', reliability: 3, cost: 8, risk: -1 },
+      { label: 'Used radiator', reliability: 4, cost: 13, risk: 0 },
+      { label: 'New radiator', reliability: 5, cost: 18, risk: 1 }
     ]
   },
   {
     id: 'fuel',
     name: 'Fuel Supply',
     options: [
-      { label: 'Fragile pump', reliability: 1, cost: 6, risk: -3 },
-      { label: 'Cheap injectors', reliability: 2, cost: 9, risk: -2 },
-      { label: 'Standard', reliability: 3, cost: 12, risk: -1 },
-      { label: 'Reliable', reliability: 4, cost: 16, risk: 0 },
-      { label: 'Simple robust', reliability: 5, cost: 19, risk: 1 }
+      { label: 'Soda bottle tank', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Garden hose line', reliability: 2, cost: 3, risk: -2 },
+      { label: 'Turkey baster', reliability: 3, cost: 8, risk: -1 },
+      { label: 'Used fuel pump', reliability: 4, cost: 13, risk: 0 },
+      { label: 'New fuel system', reliability: 5, cost: 17, risk: 1 }
     ]
   },
   {
     id: 'steering',
     name: 'Steering',
     options: [
-      { label: 'Worn', reliability: 1, cost: 6, risk: -3 },
-      { label: 'Imprecise', reliability: 2, cost: 9, risk: -2 },
-      { label: 'Standard', reliability: 3, cost: 12, risk: -1 },
-      { label: 'Reliable power steering', reliability: 4, cost: 15, risk: 0 },
-      { label: 'Robust precise', reliability: 5, cost: 18, risk: 1 }
+      { label: 'Rope tied to axle', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Fishing rod', reliability: 2, cost: 3, risk: -2 },
+      { label: 'Broom handle', reliability: 3, cost: 8, risk: -1 },
+      { label: 'Used steering', reliability: 4, cost: 12, risk: 0 },
+      { label: 'New steering', reliability: 5, cost: 16, risk: 1 }
     ]
   },
   {
     id: 'body',
     name: 'Body / Protection',
     options: [
-      { label: 'Rusty', reliability: 1, cost: 5, risk: -3 },
-      { label: 'Weak protection', reliability: 2, cost: 8, risk: -2 },
-      { label: 'Standard', reliability: 3, cost: 11, risk: -1 },
-      { label: 'Reinforced protection', reliability: 4, cost: 14, risk: 0 },
-      { label: 'Very resistant', reliability: 5, cost: 17, risk: 1 }
+      { label: 'Cardboard body', reliability: 1, cost: 0, risk: -3 },
+      { label: 'Tarp wrap', reliability: 2, cost: 3, risk: -2 },
+      { label: 'Duct tape & plastic', reliability: 3, cost: 8, risk: -1 },
+      { label: 'Salvaged panels', reliability: 4, cost: 12, risk: 0 },
+      { label: 'Rust-proof body', reliability: 5, cost: 15, risk: 1 }
     ]
   }
 ];
@@ -164,7 +164,7 @@ io.on('connection', (socket) => {
     room.hostId = socket.id;
     socket.gameCode = code;
     socket.join(code);
-    socket.emit('game-created', { code, categories: GAME_DATA.map(c => ({ id: c.id, name: c.name, options: c.options.map(o => ({ label: o.label })) })), budgetLimit: BUDGET_LIMIT });
+    socket.emit('game-created', { code, categories: GAME_DATA.map(c => ({ id: c.id, name: c.name, options: c.options.map(o => ({ label: o.label, cost: o.cost })) })), budgetLimit: BUDGET_LIMIT });
   });
 
   socket.on('join-game', ({ code, teamName }) => {
@@ -206,7 +206,7 @@ io.on('connection', (socket) => {
     io.to(code).emit('category', {
       index: 0,
       name: category.name,
-      options: category.options.map(o => ({ label: o.label }))
+      options: category.options.map(o => ({ label: o.label, cost: o.cost }))
     });
   });
 
@@ -365,7 +365,7 @@ function nextCategoryOrLeaderboard(io, code, room) {
   io.to(code).emit('category', {
     index: room.currentCategoryIndex,
     name: category.name,
-    options: category.options.map(o => ({ label: o.label }))
+    options: category.options.map(o => ({ label: o.label, cost: o.cost }))
   });
 }
 

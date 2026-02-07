@@ -190,7 +190,8 @@
         btn.type = 'button';
         btn.className = 'option-btn' + (isHost ? ' option-btn-readonly' : '');
         btn.dataset.index = i;
-        btn.innerHTML = '<span class="option-letter">' + (letters[i] || (i + 1)) + '</span><span>' + escapeHtml(opt.label) + '</span>';
+        const price = (opt.cost != null) ? ' $' + opt.cost : '';
+        btn.innerHTML = '<span class="option-letter">' + (letters[i] || (i + 1)) + '</span><span class="option-label">' + escapeHtml(opt.label) + '</span>' + (price ? '<span class="option-price">' + price + '</span>' : '');
         if (!isHost) {
           btn.addEventListener('click', () => submitAnswer(btn, i));
         } else {
@@ -257,7 +258,8 @@
       carStatsPartsList.innerHTML = '';
       (b.parts || []).forEach(function (p) {
         const li = document.createElement('li');
-        li.innerHTML = '<span class="part-name">' + escapeHtml(p.categoryName) + '</span><span class="part-choice">' + escapeHtml(p.optionLabel) + '</span>';
+        const partPrice = (p.cost != null) ? ' $' + p.cost : '';
+        li.innerHTML = '<span class="part-name">' + escapeHtml(p.categoryName) + '</span><span class="part-choice">' + escapeHtml(p.optionLabel) + '</span><span class="part-price">' + partPrice + '</span>';
         carStatsPartsList.appendChild(li);
       });
     }

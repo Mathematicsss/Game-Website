@@ -546,6 +546,17 @@ input[type="text"]:focus {
   flex-shrink: 0;
 }
 
+.option-btn .option-label {
+  flex: 1;
+}
+
+.option-btn .option-price {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
 .answer-feedback {
   margin: 1rem 0 0;
   padding: 0.75rem;
@@ -892,6 +903,13 @@ input[type="text"]:focus {
   font-weight: 500;
   color: var(--text);
   text-align: right;
+  flex: 1;
+}
+
+.car-stats-parts-list .part-price {
+  color: var(--accent);
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
 /* --- Responsive --- */
