@@ -333,6 +333,14 @@ body {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.join-row .join-label {
+  flex-shrink: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .join-row input {
@@ -340,9 +348,9 @@ body {
   min-width: 0;
 }
 
-.join-row input:first-of-type {
-  flex: 0 0 10ch;
-  min-width: 10ch;
+.join-row #input-code {
+  flex: 0 0 8ch;
+  min-width: 8ch;
 }
 
 input[type="text"] {
@@ -917,10 +925,12 @@ input[type="text"]:focus {
 @media (max-width: 480px) {
   .join-row {
     flex-direction: column;
+    align-items: stretch;
   }
 
-  .join-row input:first-of-type {
+  .join-row #input-code {
     flex: 1 1 auto;
+    min-width: 0;
   }
 
   .game-code {
