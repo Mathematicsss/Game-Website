@@ -84,7 +84,6 @@
     if (el) el.classList.add('active');
   }
 
-  // --- Home ---
   btnHost.addEventListener('click', () => {
     setHomeError('');
     if (!socket.connected) {

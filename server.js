@@ -10,7 +10,7 @@ const io = new Server(server);
 app.get('/js/config.js', (req, res) => {
   const url = process.env.SOCKET_URL || '';
   res.type('application/javascript');
-  res.send('// Injected at runtime\nwindow.SOCKET_URL = ' + JSON.stringify(url) + ';\n');
+  res.send('window.SOCKET_URL = ' + JSON.stringify(url) + ';\n');
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
