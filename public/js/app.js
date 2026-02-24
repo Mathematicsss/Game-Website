@@ -71,6 +71,9 @@
   const btnCloseCarStats = document.getElementById('btn-close-car-stats');
 
   let lastLeaderboard = [];
+  let categoryOptionsCache = [];
+  let overBudgetCache = false;
+  let remainingBudgetCache = 200;
 
   let gameCode = null;
   let isHost = false;
@@ -183,6 +186,9 @@
       const letters = 'ABCDEFGHIJKLMNOP';
       const overBudget = !!data.overBudget;
       const remaining = data.remainingBudget != null ? data.remainingBudget : 200;
+      categoryOptionsCache = data.options || [];
+      overBudgetCache = overBudget;
+      remainingBudgetCache = remaining;
       (data.options || []).forEach((opt, i) => {
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -234,16 +240,39 @@
 
   function submitAnswer(btn, optionIndex) {
     if (btn.disabled) return;
+    if (btn.classList.contains('submitting')) return;
+    btn.classList.add('submitting');
+    Array.from(gameOptions.querySelectorAll('.option-btn')).forEach(b => { b.disabled = true; });
     socket.emit('answer', { code: gameCode, optionIndex });
-    btn.disabled = true;
-    btn.classList.add('selected');
+  }
+
+  socket.on('answer-recorded', () => {
+    const selected = gameOptions.querySelector('.option-btn.submitting');
+    if (selected) {
+      selected.classList.remove('submitting');
+      selected.classList.add('selected');
+    }
     Array.from(gameOptions.querySelectorAll('.option-btn')).forEach(b => { b.disabled = true; });
     answerFeedback.textContent = 'Answer recorded!';
     answerFeedback.classList.add('recorded');
     answerFeedback.hidden = false;
-  }
+  });
 
-  socket.on('answer-recorded', () => {});
+  socket.on('answer-rejected', (data) => {
+    const opts = categoryOptionsCache || [];
+    Array.from(gameOptions.querySelectorAll('.option-btn')).forEach(b => {
+      b.classList.remove('submitting');
+      const idx = parseInt(b.dataset.index, 10);
+      const opt = opts[idx];
+      const canAfford = overBudgetCache ? (opt && opt.cost === 0) : (opt && opt.cost <= (remainingBudgetCache ?? 200));
+      b.disabled = !canAfford;
+    });
+    if (answerFeedback) {
+      answerFeedback.textContent = data.reason === 'over_budget' ? "You're over budget — pick a FREE ($0) option." : "You can't afford that option.";
+      answerFeedback.classList.remove('recorded');
+      answerFeedback.hidden = false;
+    }
+  });
 
   function getInitial(name) {
     return (name || '?').charAt(0).toUpperCase();

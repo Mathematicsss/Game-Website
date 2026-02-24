@@ -247,8 +247,14 @@ io.on('connection', (socket) => {
     const spentSoFar = getTeamSpentSoFar(socket.id, room);
     const remaining = BUDGET_LIMIT - spentSoFar;
     const overBudget = remaining < 0;
-    if (overBudget && option.cost > 0) return;
-    if (!overBudget && option.cost > remaining) return;
+    if (overBudget && option.cost > 0) {
+      socket.emit('answer-rejected', { reason: 'over_budget' });
+      return;
+    }
+    if (!overBudget && option.cost > remaining) {
+      socket.emit('answer-rejected', { reason: 'cant_afford' });
+      return;
+    }
     room.answers.set(key, { teamId: socket.id, optionIndex });
     if (!room.teamChoices.has(socket.id)) room.teamChoices.set(socket.id, new Array(GAME_DATA.length).fill(null));
     room.teamChoices.get(socket.id)[room.currentCategoryIndex] = optionIndex;
