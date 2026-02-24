@@ -130,7 +130,7 @@
   });
 
   socket.on('lobby-update', (data) => {
-    const list = data.isHost !== false ? lobbyTeams : lobbyTeamsPlayer;
+    const list = isHost ? lobbyTeams : lobbyTeamsPlayer;
     list.innerHTML = '';
     (data.teams || []).forEach(t => {
       const li = document.createElement('li');
@@ -268,7 +268,8 @@
       b.disabled = !canAfford;
     });
     if (answerFeedback) {
-      answerFeedback.textContent = data.reason === 'over_budget' ? "You're over budget — pick a FREE ($0) option." : "You can't afford that option.";
+      const msg = data.reason === 'over_budget' ? "You're over budget — pick a FREE ($0) option." : data.reason === 'cant_afford' ? "You can't afford that option." : "Invalid choice. Please try again.";
+      answerFeedback.textContent = msg;
       answerFeedback.classList.remove('recorded');
       answerFeedback.hidden = false;
     }

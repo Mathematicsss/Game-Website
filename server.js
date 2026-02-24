@@ -217,8 +217,7 @@ io.on('connection', (socket) => {
     socket.teamName = name;
     socket.emit('joined', { code, teamName: name });
     io.to(code).emit('lobby-update', {
-      teams: Array.from(room.teams.entries()).map(([id, t]) => ({ id, name: t.name })),
-      isHost: room.hostId === socket.id
+      teams: Array.from(room.teams.entries()).map(([id, t]) => ({ id, name: t.name }))
     });
   });
 
@@ -242,8 +241,12 @@ io.on('connection', (socket) => {
     const key = `${room.currentCategoryIndex}-${socket.id}`;
     if (room.answers.has(key)) return;
     const category = GAME_DATA[room.currentCategoryIndex];
-    const option = category.options[optionIndex];
-    if (!option) return;
+    const optIdx = parseInt(optionIndex, 10);
+    if (isNaN(optIdx) || optIdx < 0 || optIdx >= category.options.length) {
+      socket.emit('answer-rejected', { reason: 'invalid_option' });
+      return;
+    }
+    const option = category.options[optIdx];
     const spentSoFar = getTeamSpentSoFar(socket.id, room);
     const remaining = BUDGET_LIMIT - spentSoFar;
     const overBudget = remaining < 0;
@@ -255,9 +258,9 @@ io.on('connection', (socket) => {
       socket.emit('answer-rejected', { reason: 'cant_afford' });
       return;
     }
-    room.answers.set(key, { teamId: socket.id, optionIndex });
+    room.answers.set(key, { teamId: socket.id, optionIndex: optIdx });
     if (!room.teamChoices.has(socket.id)) room.teamChoices.set(socket.id, new Array(GAME_DATA.length).fill(null));
-    room.teamChoices.get(socket.id)[room.currentCategoryIndex] = optionIndex;
+    room.teamChoices.get(socket.id)[room.currentCategoryIndex] = optIdx;
     socket.emit('answer-recorded');
     const totalInRoom = room.teams.size;
     const answered = new Set([...room.answers.keys()].map(k => k.split('-')[1]));
@@ -288,8 +291,7 @@ io.on('connection', (socket) => {
     } else {
       room.teams.delete(socket.id);
       io.to(code).emit('lobby-update', {
-        teams: Array.from(room.teams.entries()).map(([id, t]) => ({ id, name: t.name })),
-        isHost: false
+        teams: Array.from(room.teams.entries()).map(([id, t]) => ({ id, name: t.name }))
       });
     }
   });
@@ -301,9 +303,14 @@ io.on('connection', (socket) => {
       room.teams.delete(socket.id);
       if (room.state === 'lobby') {
         io.to(code).emit('lobby-update', {
-          teams: Array.from(room.teams.entries()).map(([id, t]) => ({ id, name: t.name })),
-          isHost: room.hostId === socket.id
+          teams: Array.from(room.teams.entries()).map(([id, t]) => ({ id, name: t.name }))
         });
+      } else if (room.state === 'playing') {
+        const totalRemaining = room.teams.size;
+        const answered = new Set([...room.answers.keys()].map(k => k.split('-')[1]));
+        if (totalRemaining > 0 && answered.size >= totalRemaining) {
+          nextCategoryOrLeaderboard(io, code, room);
+        }
       }
     }
   });
