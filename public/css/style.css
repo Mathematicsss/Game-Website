@@ -523,6 +523,12 @@ input[type="text"]:focus {
   opacity: 0.7;
 }
 
+.option-btn-disabled:disabled {
+  opacity: 0.4;
+  filter: grayscale(0.5);
+  cursor: not-allowed;
+}
+
 .option-btn.selected {
   border-color: var(--success);
   background: rgba(42, 157, 143, 0.15);

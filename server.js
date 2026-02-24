@@ -25,15 +25,20 @@ function generateCode() {
 }
 
 const BUDGET_LIMIT = 200;
-const BONUS_NO_ONE_STAR = 5;
-const MALUS_THREE_PLUS_ONE_STAR = 5;
-const MALUS_OVER_BUDGET = 5;
+const BONUS_NO_ONE_STAR = 10;
+const MALUS_THREE_PLUS_ONE_STAR = 15;
+const MALUS_OVER_BUDGET = 15;
+
+// Reliability and risk use wider ranges so scores spread out more (not always tied)
+const RELIABILITY_SCORE_MULT = 3;
+const RISK_SCORE_MULT = 2;
 
 const GAME_DATA = [
   {
     id: 'engine',
     name: 'Engine',
     options: [
+      { label: 'Wishful thinking', reliability: 0, cost: 0, risk: -6 },
       { label: 'Rubber band & prayer', reliability: 1, cost: 0, risk: -3 },
       { label: 'Lawn mower engine', reliability: 2, cost: 5, risk: -2 },
       { label: 'Salvaged weed-whacker', reliability: 3, cost: 10, risk: -1 },
@@ -45,6 +50,7 @@ const GAME_DATA = [
     id: 'transmission',
     name: 'Transmission',
     options: [
+      { label: 'Imaginary gears', reliability: 0, cost: 0, risk: -6 },
       { label: 'Shopping cart axle', reliability: 1, cost: 0, risk: -3 },
       { label: 'Bicycle chain', reliability: 2, cost: 4, risk: -2 },
       { label: 'Go-kart gearbox', reliability: 3, cost: 10, risk: -1 },
@@ -56,6 +62,7 @@ const GAME_DATA = [
     id: 'chassis',
     name: 'Chassis',
     options: [
+      { label: 'Thin air', reliability: 0, cost: 0, risk: -6 },
       { label: 'Styrofoam frame', reliability: 1, cost: 0, risk: -3 },
       { label: 'Cardboard reinforced', reliability: 2, cost: 4, risk: -2 },
       { label: 'Plywood chassis', reliability: 3, cost: 10, risk: -1 },
@@ -67,6 +74,7 @@ const GAME_DATA = [
     id: 'electrical',
     name: 'Electrical System',
     options: [
+      { label: 'Hope & darkness', reliability: 0, cost: 0, risk: -6 },
       { label: 'Candle lights', reliability: 1, cost: 0, risk: -3 },
       { label: 'Flashlight taped on', reliability: 2, cost: 4, risk: -2 },
       { label: 'Dollar store wiring', reliability: 3, cost: 10, risk: -1 },
@@ -78,6 +86,7 @@ const GAME_DATA = [
     id: 'suspension',
     name: 'Suspension',
     options: [
+      { label: 'Rocks for cushions', reliability: 0, cost: 0, risk: -6 },
       { label: 'No springs (just hope)', reliability: 1, cost: 0, risk: -3 },
       { label: 'Pencil springs', reliability: 2, cost: 3, risk: -2 },
       { label: 'Office chair springs', reliability: 3, cost: 8, risk: -1 },
@@ -89,6 +98,7 @@ const GAME_DATA = [
     id: 'brakes',
     name: 'Brakes',
     options: [
+      { label: 'Foot drag', reliability: 0, cost: 0, risk: -6 },
       { label: 'Flip-flop on tire', reliability: 1, cost: 0, risk: -3 },
       { label: 'Shoe brake', reliability: 2, cost: 3, risk: -2 },
       { label: 'Bicycle brake', reliability: 3, cost: 8, risk: -1 },
@@ -100,6 +110,7 @@ const GAME_DATA = [
     id: 'cooling',
     name: 'Cooling',
     options: [
+      { label: 'Thoughts and prayers', reliability: 0, cost: 0, risk: -6 },
       { label: 'Ice pack', reliability: 1, cost: 0, risk: -3 },
       { label: 'House fan', reliability: 2, cost: 3, risk: -2 },
       { label: 'PC fan', reliability: 3, cost: 8, risk: -1 },
@@ -111,6 +122,7 @@ const GAME_DATA = [
     id: 'fuel',
     name: 'Fuel Supply',
     options: [
+      { label: 'Spite & fumes', reliability: 0, cost: 0, risk: -6 },
       { label: 'Soda bottle tank', reliability: 1, cost: 0, risk: -3 },
       { label: 'Garden hose line', reliability: 2, cost: 3, risk: -2 },
       { label: 'Turkey baster', reliability: 3, cost: 8, risk: -1 },
@@ -122,6 +134,7 @@ const GAME_DATA = [
     id: 'steering',
     name: 'Steering',
     options: [
+      { label: 'Blow in the wind', reliability: 0, cost: 0, risk: -6 },
       { label: 'Rope tied to axle', reliability: 1, cost: 0, risk: -3 },
       { label: 'Fishing rod', reliability: 2, cost: 3, risk: -2 },
       { label: 'Broom handle', reliability: 3, cost: 8, risk: -1 },
@@ -133,6 +146,7 @@ const GAME_DATA = [
     id: 'body',
     name: 'Body / Protection',
     options: [
+      { label: 'Pure exposure', reliability: 0, cost: 0, risk: -6 },
       { label: 'Cardboard body', reliability: 1, cost: 0, risk: -3 },
       { label: 'Tarp wrap', reliability: 2, cost: 3, risk: -2 },
       { label: 'Duct tape & plastic', reliability: 3, cost: 8, risk: -1 },
@@ -141,6 +155,20 @@ const GAME_DATA = [
     ]
   }
 ];
+
+function getTeamSpentSoFar(teamId, room) {
+  const choices = room.teamChoices.get(teamId);
+  if (!choices) return 0;
+  let spent = 0;
+  for (let i = 0; i < room.currentCategoryIndex && i < GAME_DATA.length; i++) {
+    const optIdx = choices[i];
+    if (optIdx != null) {
+      const opt = GAME_DATA[i].options[optIdx];
+      if (opt) spent += opt.cost;
+    }
+  }
+  return spent;
+}
 
 function getRoom(code) {
   if (!rooms.has(code)) {
@@ -202,12 +230,7 @@ io.on('connection', (socket) => {
     room.answers = new Map();
     room.teamChoices = new Map();
     room.startedAt = Date.now();
-    const category = GAME_DATA[0];
-    io.to(code).emit('category', {
-      index: 0,
-      name: category.name,
-      options: category.options.map(o => ({ label: o.label, cost: o.cost }))
-    });
+    emitCategoryToRoom(io, code, room, 0);
   });
 
   socket.on('answer', ({ code, optionIndex }) => {
@@ -221,6 +244,11 @@ io.on('connection', (socket) => {
     const category = GAME_DATA[room.currentCategoryIndex];
     const option = category.options[optionIndex];
     if (!option) return;
+    const spentSoFar = getTeamSpentSoFar(socket.id, room);
+    const remaining = BUDGET_LIMIT - spentSoFar;
+    const overBudget = remaining < 0;
+    if (overBudget && option.cost > 0) return;
+    if (!overBudget && option.cost > remaining) return;
     room.answers.set(key, { teamId: socket.id, optionIndex });
     if (!room.teamChoices.has(socket.id)) room.teamChoices.set(socket.id, new Array(GAME_DATA.length).fill(null));
     room.teamChoices.get(socket.id)[room.currentCategoryIndex] = optionIndex;
@@ -292,7 +320,7 @@ function computeFinalScore(teamId, room) {
     totalRisk += opt.risk;
     if (opt.reliability === 1) countOneStar += 1;
   }
-  let points = totalReliability + totalRisk;
+  let points = (totalReliability * RELIABILITY_SCORE_MULT) + (totalRisk * RISK_SCORE_MULT);
   if (totalCost > BUDGET_LIMIT) points -= MALUS_OVER_BUDGET;
   if (countOneStar === 0) points += BONUS_NO_ONE_STAR;
   if (countOneStar >= 3) points -= MALUS_THREE_PLUS_ONE_STAR;
@@ -300,9 +328,9 @@ function computeFinalScore(teamId, room) {
 }
 
 function getBreakdownLikelihood(totalReliability) {
-  if (totalReliability <= 18) return 'Very high';
-  if (totalReliability <= 28) return 'High';
-  if (totalReliability <= 38) return 'Medium';
+  if (totalReliability <= 15) return 'Very high';
+  if (totalReliability <= 25) return 'High';
+  if (totalReliability <= 35) return 'Medium';
   return 'Low';
 }
 
@@ -361,12 +389,33 @@ function nextCategoryOrLeaderboard(io, code, room) {
     return;
   }
   room.answers = new Map();
-  const category = GAME_DATA[room.currentCategoryIndex];
-  io.to(code).emit('category', {
-    index: room.currentCategoryIndex,
+  emitCategoryToRoom(io, code, room, room.currentCategoryIndex);
+}
+
+function emitCategoryToRoom(io, code, room, categoryIndex) {
+  const category = GAME_DATA[categoryIndex];
+  const payload = {
+    index: categoryIndex,
     name: category.name,
     options: category.options.map(o => ({ label: o.label, cost: o.cost }))
+  };
+  room.teams.forEach((team, teamSocketId) => {
+    const spent = getTeamSpentSoFar(teamSocketId, room);
+    const remaining = BUDGET_LIMIT - spent;
+    const overBudget = remaining < 0;
+    io.to(teamSocketId).emit('category', {
+      ...payload,
+      remainingBudget: Math.max(0, remaining),
+      overBudget
+    });
   });
+  if (room.hostId) {
+    io.to(room.hostId).emit('category', {
+      ...payload,
+      remainingBudget: BUDGET_LIMIT,
+      overBudget: false
+    });
+  }
 }
 
 const PORT = process.env.PORT || 3000;

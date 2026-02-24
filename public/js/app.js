@@ -180,16 +180,20 @@
 
     if (gameOptions) {
       gameOptions.innerHTML = '';
-      const letters = 'ABCDEFGHIJ';
+      const letters = 'ABCDEFGHIJKLMNOP';
+      const overBudget = !!data.overBudget;
+      const remaining = data.remainingBudget != null ? data.remainingBudget : 200;
       (data.options || []).forEach((opt, i) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'option-btn' + (isHost ? ' option-btn-readonly' : '');
+        const canAfford = overBudget ? (opt.cost === 0) : (opt.cost <= remaining);
+        btn.className = 'option-btn' + (isHost ? ' option-btn-readonly' : '') + (!canAfford ? ' option-btn-disabled' : '');
         btn.dataset.index = i;
         const price = (opt.cost != null) ? ' $' + opt.cost : '';
         btn.innerHTML = '<span class="option-letter">' + (letters[i] || (i + 1)) + '</span><span class="option-label">' + escapeHtml(opt.label) + '</span>' + (price ? '<span class="option-price">' + price + '</span>' : '');
         if (!isHost) {
-          btn.addEventListener('click', () => submitAnswer(btn, i));
+          btn.disabled = !canAfford;
+          if (canAfford) btn.addEventListener('click', () => submitAnswer(btn, i));
         } else {
           btn.disabled = true;
         }
@@ -202,6 +206,16 @@
       });
     }
 
+    const gameReminderText = document.querySelector('.game-reminder-text');
+    if (gameReminderText) {
+      const overBudget = !!data.overBudget;
+      const remaining = data.remainingBudget != null ? data.remainingBudget : 200;
+      if (overBudget) {
+        gameReminderText.textContent = "You're over budget! You can only pick FREE ($0) options from here on.";
+      } else {
+        gameReminderText.textContent = 'You have $' + remaining + ' left. Over 200$ total = −15 points. Your score = reliability + risk.';
+      }
+    }
     if (gameRulesOverlay) {
       if (data.index === 0) {
         gameRulesOverlay.hidden = false;
