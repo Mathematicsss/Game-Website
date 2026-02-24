@@ -40,10 +40,10 @@ const GAME_DATA = [
     options: [
       { label: 'Wishful thinking', reliability: 0, cost: 0, risk: -6 },
       { label: 'Rubber band & prayer', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Lawn mower engine', reliability: 2, cost: 5, risk: -2 },
-      { label: 'Salvaged weed-whacker', reliability: 3, cost: 10, risk: -1 },
-      { label: 'Used car engine', reliability: 4, cost: 18, risk: 0 },
-      { label: 'Refurbished engine', reliability: 5, cost: 25, risk: 1 }
+      { label: 'Lawn mower engine', reliability: 2, cost: 15, risk: -2 },
+      { label: 'Salvaged weed-whacker', reliability: 3, cost: 28, risk: -1 },
+      { label: 'Used car engine', reliability: 4, cost: 45, risk: 0 },
+      { label: 'Refurbished engine', reliability: 5, cost: 65, risk: 1 }
     ]
   },
   {
@@ -52,10 +52,10 @@ const GAME_DATA = [
     options: [
       { label: 'Imaginary gears', reliability: 0, cost: 0, risk: -6 },
       { label: 'Shopping cart axle', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Bicycle chain', reliability: 2, cost: 4, risk: -2 },
-      { label: 'Go-kart gearbox', reliability: 3, cost: 10, risk: -1 },
-      { label: 'Used manual', reliability: 4, cost: 16, risk: 0 },
-      { label: 'Rebuilt transmission', reliability: 5, cost: 22, risk: 1 }
+      { label: 'Bicycle chain', reliability: 2, cost: 12, risk: -2 },
+      { label: 'Go-kart gearbox', reliability: 3, cost: 28, risk: -1 },
+      { label: 'Used manual', reliability: 4, cost: 42, risk: 0 },
+      { label: 'Rebuilt transmission', reliability: 5, cost: 58, risk: 1 }
     ]
   },
   {
@@ -64,10 +64,10 @@ const GAME_DATA = [
     options: [
       { label: 'Thin air', reliability: 0, cost: 0, risk: -6 },
       { label: 'Styrofoam frame', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Cardboard reinforced', reliability: 2, cost: 4, risk: -2 },
-      { label: 'Plywood chassis', reliability: 3, cost: 10, risk: -1 },
-      { label: 'Salvaged frame', reliability: 4, cost: 16, risk: 0 },
-      { label: 'Reinforced frame', reliability: 5, cost: 22, risk: 1 }
+      { label: 'Cardboard reinforced', reliability: 2, cost: 12, risk: -2 },
+      { label: 'Plywood chassis', reliability: 3, cost: 26, risk: -1 },
+      { label: 'Salvaged frame', reliability: 4, cost: 40, risk: 0 },
+      { label: 'Reinforced frame', reliability: 5, cost: 55, risk: 1 }
     ]
   },
   {
@@ -76,10 +76,10 @@ const GAME_DATA = [
     options: [
       { label: 'Hope & darkness', reliability: 0, cost: 0, risk: -6 },
       { label: 'Candle lights', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Flashlight taped on', reliability: 2, cost: 4, risk: -2 },
-      { label: 'Dollar store wiring', reliability: 3, cost: 10, risk: -1 },
-      { label: 'Used harness', reliability: 4, cost: 15, risk: 0 },
-      { label: 'New wiring', reliability: 5, cost: 20, risk: 1 }
+      { label: 'Flashlight taped on', reliability: 2, cost: 10, risk: -2 },
+      { label: 'Dollar store wiring', reliability: 3, cost: 24, risk: -1 },
+      { label: 'Used harness', reliability: 4, cost: 38, risk: 0 },
+      { label: 'New wiring', reliability: 5, cost: 50, risk: 1 }
     ]
   },
   {
@@ -88,10 +88,10 @@ const GAME_DATA = [
     options: [
       { label: 'Rocks for cushions', reliability: 0, cost: 0, risk: -6 },
       { label: 'No springs (just hope)', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Pencil springs', reliability: 2, cost: 3, risk: -2 },
-      { label: 'Office chair springs', reliability: 3, cost: 8, risk: -1 },
-      { label: 'Salvaged struts', reliability: 4, cost: 14, risk: 0 },
-      { label: 'New shocks', reliability: 5, cost: 19, risk: 1 }
+      { label: 'Pencil springs', reliability: 2, cost: 10, risk: -2 },
+      { label: 'Office chair springs', reliability: 3, cost: 22, risk: -1 },
+      { label: 'Salvaged struts', reliability: 4, cost: 35, risk: 0 },
+      { label: 'New shocks', reliability: 5, cost: 48, risk: 1 }
     ]
   },
   {
@@ -100,10 +100,10 @@ const GAME_DATA = [
     options: [
       { label: 'Foot drag', reliability: 0, cost: 0, risk: -6 },
       { label: 'Flip-flop on tire', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Shoe brake', reliability: 2, cost: 3, risk: -2 },
-      { label: 'Bicycle brake', reliability: 3, cost: 8, risk: -1 },
-      { label: 'Used brake pads', reliability: 4, cost: 14, risk: 0 },
-      { label: 'New brakes', reliability: 5, cost: 19, risk: 1 }
+      { label: 'Shoe brake', reliability: 2, cost: 10, risk: -2 },
+      { label: 'Bicycle brake', reliability: 3, cost: 22, risk: -1 },
+      { label: 'Used brake pads', reliability: 4, cost: 36, risk: 0 },
+      { label: 'New brakes', reliability: 5, cost: 50, risk: 1 }
     ]
   },
   {
@@ -112,10 +112,10 @@ const GAME_DATA = [
     options: [
       { label: 'Thoughts and prayers', reliability: 0, cost: 0, risk: -6 },
       { label: 'Ice pack', reliability: 1, cost: 0, risk: -3 },
-      { label: 'House fan', reliability: 2, cost: 3, risk: -2 },
-      { label: 'PC fan', reliability: 3, cost: 8, risk: -1 },
-      { label: 'Used radiator', reliability: 4, cost: 13, risk: 0 },
-      { label: 'New radiator', reliability: 5, cost: 18, risk: 1 }
+      { label: 'House fan', reliability: 2, cost: 10, risk: -2 },
+      { label: 'PC fan', reliability: 3, cost: 20, risk: -1 },
+      { label: 'Used radiator', reliability: 4, cost: 32, risk: 0 },
+      { label: 'New radiator', reliability: 5, cost: 45, risk: 1 }
     ]
   },
   {
@@ -124,10 +124,10 @@ const GAME_DATA = [
     options: [
       { label: 'Spite & fumes', reliability: 0, cost: 0, risk: -6 },
       { label: 'Soda bottle tank', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Garden hose line', reliability: 2, cost: 3, risk: -2 },
-      { label: 'Turkey baster', reliability: 3, cost: 8, risk: -1 },
-      { label: 'Used fuel pump', reliability: 4, cost: 13, risk: 0 },
-      { label: 'New fuel system', reliability: 5, cost: 17, risk: 1 }
+      { label: 'Garden hose line', reliability: 2, cost: 10, risk: -2 },
+      { label: 'Turkey baster', reliability: 3, cost: 20, risk: -1 },
+      { label: 'Used fuel pump', reliability: 4, cost: 32, risk: 0 },
+      { label: 'New fuel system', reliability: 5, cost: 44, risk: 1 }
     ]
   },
   {
@@ -136,10 +136,10 @@ const GAME_DATA = [
     options: [
       { label: 'Blow in the wind', reliability: 0, cost: 0, risk: -6 },
       { label: 'Rope tied to axle', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Fishing rod', reliability: 2, cost: 3, risk: -2 },
-      { label: 'Broom handle', reliability: 3, cost: 8, risk: -1 },
-      { label: 'Used steering', reliability: 4, cost: 12, risk: 0 },
-      { label: 'New steering', reliability: 5, cost: 16, risk: 1 }
+      { label: 'Fishing rod', reliability: 2, cost: 8, risk: -2 },
+      { label: 'Broom handle', reliability: 3, cost: 18, risk: -1 },
+      { label: 'Used steering', reliability: 4, cost: 28, risk: 0 },
+      { label: 'New steering', reliability: 5, cost: 40, risk: 1 }
     ]
   },
   {
@@ -148,10 +148,10 @@ const GAME_DATA = [
     options: [
       { label: 'Pure exposure', reliability: 0, cost: 0, risk: -6 },
       { label: 'Cardboard body', reliability: 1, cost: 0, risk: -3 },
-      { label: 'Tarp wrap', reliability: 2, cost: 3, risk: -2 },
-      { label: 'Duct tape & plastic', reliability: 3, cost: 8, risk: -1 },
-      { label: 'Salvaged panels', reliability: 4, cost: 12, risk: 0 },
-      { label: 'Rust-proof body', reliability: 5, cost: 15, risk: 1 }
+      { label: 'Tarp wrap', reliability: 2, cost: 8, risk: -2 },
+      { label: 'Duct tape & plastic', reliability: 3, cost: 18, risk: -1 },
+      { label: 'Salvaged panels', reliability: 4, cost: 28, risk: 0 },
+      { label: 'Rust-proof body', reliability: 5, cost: 38, risk: 1 }
     ]
   }
 ];
